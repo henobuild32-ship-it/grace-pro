@@ -442,3 +442,24 @@ Stage Summary:
 - Hydration mismatch error fully resolved.
 - Hero scroll indicator now uses `<motion.div>` (animation wrapper) → `<button>` (semantic, accessible) → `<motion.div>` (bounce animation) — no more `motion.button` to avoid SSR/client rendering divergence.
 - All routes render cleanly without any hydration, runtime, or console errors.
+
+---
+Task ID: 35
+Agent: main
+Task: Fix persistent hydration mismatch — dev server was serving stale cached RSC payload.
+
+Work Log:
+- The hydration error persisted even after the `motion.button` → `motion.div` + `<button>` fix because the Next.js dev server was serving a **stale cached RSC payload** from before the fix was applied. The server's cached HTML still had the old `<motion.button>` structure (rendered as `<div>` with the full button className + `<span>` child), while the client bundle had the new code (`<motion.div>` with short className + `<button>` child).
+- Cleared the dev server cache:
+  - `rm -rf /home/z/my-project/.next/dev/cache` — deleted the RocksDB/SST cache that holds the stale RSC payload.
+  - `touch /home/z/my-project/src/app/layout.tsx` — triggered a full recompile of the route tree.
+  - The dev server automatically recompiled and regenerated fresh RSC payloads on the next request.
+- Verification (Agent Browser):
+  - Opened `/` — console shows only "HMR connected" + "PWA service worker registered". Zero hydration errors. ✓
+  - Reloaded the page — console completely clean, zero errors/warnings. ✓
+  - Scroll indicator still works: clicking "Faire défiler vers le bas" scrolls 0 → 590px. ✓
+  - All 7 routes (`/`, `/a-propos`, `/domaines`, `/projets`, `/partenaires`, `/contact`, `/connexion`) load with 200 and zero hydration errors. ✓
+
+Stage Summary:
+- Hydration mismatch fully resolved by combining the code fix (`motion.button` → `motion.div` + `<button>`) with a dev server cache clear (`.next/dev/cache` deletion + layout touch).
+- The stale RSC payload was the root cause of the persistent error — now regenerated fresh on every request.
