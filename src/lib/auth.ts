@@ -76,7 +76,7 @@ function verifyToken(token: string): SessionPayload | null {
   try {
     const payload = JSON.parse(base64urlDecode(payloadB64).toString('utf8')) as SessionPayload
     const now = Math.floor(Date.now() / 1000)
-    if (payload.exp < now) return null
+    if (payload.sub !== 'admin' || !payload.email || payload.exp <= now) return null
     return payload
   } catch {
     return null
