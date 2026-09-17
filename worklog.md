@@ -463,3 +463,19 @@ Work Log:
 Stage Summary:
 - Hydration mismatch fully resolved by combining the code fix (`motion.button` → `motion.div` + `<button>`) with a dev server cache clear (`.next/dev/cache` deletion + layout touch).
 - The stale RSC payload was the root cause of the persistent error — now regenerated fresh on every request.
+
+---
+Task ID: 36
+Agent: main
+Task: Replace the "Production artistique" service AI image with a new different one.
+
+Work Log:
+- Identified the old image (`/public/images/service-artistique.png`): a man with a beard singing into a gold microphone with purple lighting.
+- Generated a new AI image via `z-ai image` CLI with a fresh concept: "Professional African female music artist in a premium recording studio booth, wearing studio headphones, singing into a large gold condenser microphone, dark moody atmosphere with warm golden and deep purple accent lighting, vintage analog mixing console visible in background."
+- Saved the new image to the same path `/public/images/service-artistique.png` (1024x1024, 120KB) — no data.ts change needed since the path reference is unchanged.
+- VLM verified the new image: "A woman with curly hair wearing headphones singing into a professional studio microphone, intimate passionate mood of artistic concentration." — clearly different from the old image.
+- Agent Browser verification on `/domaines`: image loaded successfully (`loaded: true`, 387px wide), alt text "Production artistique" present. VLM confirmed: "Service card showing a female artist with headphones singing into a studio microphone, titled 'Production artistique'." ✓
+
+Stage Summary:
+- "Production artistique" service card now displays a fresh AI image (female artist in studio with headphones) — different from the previous one (male artist with beard).
+- No code changes needed (same image path, just the file content was replaced).
