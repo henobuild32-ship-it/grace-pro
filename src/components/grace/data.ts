@@ -422,9 +422,7 @@ export const CONTACT_INFO = [
   { icon: Clock, label: "Horaires", value: SITE.hours },
 ];
 
-// Hero background — uses a vibrant festival crowd image
-export const HERO_IMAGE = "/images/festival-5.jpeg";
-// About / team image
+// About / team image (content card, not background)
 export const ABOUT_IMAGE = "/images/festival-2.jpeg";
 // Logo (official Grace Production logo)
 export const LOGO_PATH = "/images/logo.jpeg";

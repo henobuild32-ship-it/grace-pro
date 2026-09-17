@@ -228,3 +228,44 @@ Stage Summary:
 - Official Grace Production logo now appears in 3 background positions (hero corners, about section, partners CTA) as elegant decorative watermarks, plus the small navbar badge and footer brand.
 - Surnaturel Na Bala Bala project now uses the user's real poster with full event details (date, venue, partners, theme).
 - All AI-generated service images remain (user hasn't provided service-specific photos yet — ready to swap when provided).
+
+---
+Task ID: 18-20
+Agent: main
+Task: Phase 4 — Replace ALL poster/photo backgrounds with ONLY the logo as background.
+
+Work Log:
+- Redesigned `LogoBackground` component (`src/components/grace/logo-background.tsx`):
+  - Removed the `blend` prop (no more `mix-blend-screen` etc.) — now uses normal blending for predictable, premium look.
+  - Added a soft gold halo (radial gradient blur) behind the logo for a luminous glow.
+  - Improved the radial mask: `ellipse 70% 70% at center, black 55%, transparent 92%` — fades the white background of the logo smoothly into the section.
+  - Stronger gold drop-shadow glow.
+  - Default opacity 0.18, default size 480, default rotation 0 (centered, straight).
+- Rewrote the Hero (`src/components/grace/hero.tsx`):
+  - REMOVED the festival-5.jpeg background image entirely.
+  - Background is now `bg-night-gradient` (pure dark gradient: #0D0D0D → #1A1A2E → #0D0D0D).
+  - Added ambient gradient blobs (purple + gold, blurred) for warmth & depth.
+  - Added a subtle decorative grid (masked radial) for premium texture.
+  - Large centered `LogoBackground` watermark (size 820, opacity 0.22, glow on).
+  - Kept gold particles, vignette overlay, and all hero content (title, tagline, CTAs, marquee, scroll indicator).
+  - Removed the `HERO_IMAGE` constant from `data.ts` (no longer needed).
+- Updated the Partners CTA section (`src/components/grace/partners.tsx`):
+  - REMOVED the `partners-cta.png` background image entirely.
+  - Background is now `bg-night-gradient` with ambient gradient blobs + decorative grid.
+  - Large centered `LogoBackground` watermark (size 760, opacity 0.16, glow on).
+- Updated the Contact section (`src/components/grace/contact.tsx`):
+  - REMOVED the `contact-bg.png` background image entirely.
+  - Background is now `bg-night-gradient` with ambient gradient blobs.
+  - Added a `LogoBackground` watermark (size 680, opacity 0.14, glow on) behind the contact form.
+
+- Verification (VLM with precise prompts):
+  - Hero: VLM confirms "No photograph of people, crowd, or concert in the background. Only the Grace Production logo watermark (stylized G + 'GRACE PRODUCTION' text) on a dark grey/charcoal background." Screenshot file size dropped from ~1.1MB (with festival) to ~290KB (only logo + gradients) confirming no photographic content.
+  - Partners page: VLM confirms "Background is ONLY the Grace Production logo watermark. No photo of skyline, city, or poster."
+  - Contact page: VLM confirms "Background is ONLY the Grace Production logo watermark. No photo of city skyline."
+  - `bun run lint` clean.
+
+Stage Summary:
+- ALL poster/photo backgrounds removed (festival hero image, partners-cta.png, contact-bg.png).
+- ONLY the official Grace Production logo now appears as the background decoration across the hero, partners CTA, and contact sections.
+- Logo watermark is elegant: large, centered, soft radial mask (no hard edges), gold glow halo, premium dark gradient background.
+- Content images (festival posters inside the About card, project cards, service cards, project galleries) remain as content — NOT as backgrounds. These are intentional content visuals, not background posters.

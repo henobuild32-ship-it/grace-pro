@@ -4,34 +4,44 @@ import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, PlayCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { SITE, HERO_IMAGE } from './data'
+import { SITE } from './data'
 import { LogoBackground } from './logo-background'
 
 export function Hero() {
   return (
-    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-night">
-      {/* Background image with overlays */}
-      <div className="absolute inset-0">
-        <motion.div
-          initial={{ scale: 1.1, opacity: 0 }}
-          animate={{ scale: 1, opacity: 1 }}
-          transition={{ duration: 2.2, ease: 'easeOut' }}
-          className="absolute inset-0"
-        >
-          <img
-            src={HERO_IMAGE}
-            alt="Festival Père des Orphelins — Grace Production"
-            className="h-full w-full object-cover"
-          />
-        </motion.div>
-        {/* Gradient overlays for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/75 to-night/30" />
-        <div className="absolute inset-0 bg-gradient-to-r from-night/80 via-night/40 to-transparent" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(13,13,13,0.7)_100%)]" />
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-night-gradient">
+      {/* Subtle ambient gradient blobs for warmth & depth */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 h-[36rem] w-[36rem] rounded-full bg-purple/15 blur-[140px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-[36rem] w-[36rem] rounded-full bg-gold/12 blur-[140px]" />
       </div>
 
+      {/* Subtle decorative grid */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(212,175,55,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(212,175,55,0.5) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+          maskImage:
+            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+        }}
+      />
+
+      {/* THE LOGO AS BACKGROUND — large, centered, soft edges */}
+      <LogoBackground
+        opacity={0.22}
+        size={820}
+        rotate={0}
+        position="center"
+        glow={true}
+        className="z-[1]"
+      />
+
       {/* Decorative gold particles */}
-      <div className="absolute inset-0 pointer-events-none">
+      <div className="absolute inset-0 pointer-events-none z-[2]">
         {Array.from({ length: 14 }).map((_, i) => (
           <motion.span
             key={i}
@@ -53,23 +63,8 @@ export function Hero() {
         ))}
       </div>
 
-      {/* Decorative logo watermark in background — visible brand element */}
-      <LogoBackground
-        opacity={0.6}
-        size={420}
-        rotate={-8}
-        position="top-right"
-        blend="normal"
-        className="z-[1]"
-      />
-      <LogoBackground
-        opacity={0.5}
-        size={360}
-        rotate={8}
-        position="bottom-left"
-        blend="normal"
-        className="z-[1]"
-      />
+      {/* Soft vignette for legibility */}
+      <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_40%,rgba(13,13,13,0.6)_100%)] z-[3] pointer-events-none" />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto max-w-7xl px-4 md:px-8 text-center pt-24 pb-16">

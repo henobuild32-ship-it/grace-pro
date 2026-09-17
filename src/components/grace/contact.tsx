@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { SITE, CONTACT_SUBJECTS, SOCIAL_LINKS } from './data'
+import { LogoBackground } from './logo-background'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Le nom est requis'),
@@ -84,16 +85,21 @@ export function Contact() {
   }
 
   return (
-    <section id="contact" className="relative section-pad bg-night overflow-hidden scroll-mt-24">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img
-          src="/images/contact-bg.png"
-          alt="Skyline de Kinshasa au crépuscule"
-          className="h-full w-full object-cover opacity-20"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-night via-night/90 to-night" />
+    <section id="contact" className="relative section-pad bg-night-gradient overflow-hidden scroll-mt-24">
+      {/* Ambient gradient blobs for depth */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-purple/15 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-gold/12 blur-[120px]" />
       </div>
+
+      {/* Decorative logo watermark in background */}
+      <LogoBackground
+        opacity={0.14}
+        size={680}
+        rotate={0}
+        position="center"
+        glow={true}
+      />
 
       <div className="container mx-auto max-w-7xl px-4 md:px-8 relative">
         <motion.div

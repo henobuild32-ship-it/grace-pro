@@ -55,24 +55,34 @@ const BENEFITS = [
 
 export function PartnersCTA() {
   return (
-    <section className="relative section-pad bg-night overflow-hidden">
-      {/* Background image */}
-      <div className="absolute inset-0">
-        <img
-          src="/images/partners-cta.png"
-          alt="Partenaires & Investisseurs — Grace Production"
-          className="h-full w-full object-cover opacity-30"
-        />
-        <div className="absolute inset-0 bg-gradient-to-b from-night via-night/85 to-night" />
+    <section className="relative section-pad bg-night-gradient overflow-hidden">
+      {/* Ambient gradient blobs for depth */}
+      <div className="absolute inset-0 pointer-events-none">
+        <div className="absolute top-1/4 left-1/4 h-96 w-96 rounded-full bg-purple/15 blur-[120px]" />
+        <div className="absolute bottom-1/4 right-1/4 h-96 w-96 rounded-full bg-gold/12 blur-[120px]" />
       </div>
+
+      {/* Decorative grid */}
+      <div
+        className="absolute inset-0 opacity-[0.04] pointer-events-none"
+        style={{
+          backgroundImage:
+            'linear-gradient(to right, rgba(212,175,55,0.5) 1px, transparent 1px), linear-gradient(to bottom, rgba(212,175,55,0.5) 1px, transparent 1px)',
+          backgroundSize: '80px 80px',
+          maskImage:
+            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+          WebkitMaskImage:
+            'radial-gradient(ellipse at center, black 30%, transparent 80%)',
+        }}
+      />
 
       {/* Decorative logo watermark in background */}
       <LogoBackground
-        opacity={0.22}
-        size={720}
-        rotate={-4}
+        opacity={0.16}
+        size={760}
+        rotate={0}
         position="center"
-        blend="screen"
+        glow={true}
       />
 
       <div className="container mx-auto max-w-7xl px-4 md:px-8 relative">
