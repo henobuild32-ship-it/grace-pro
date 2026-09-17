@@ -130,7 +130,7 @@ export function AdminSidebar() {
       </aside>
 
       {/* Mobile top bar + Sheet */}
-      <div className="lg:hidden sticky top-0 z-30 bg-night/95 backdrop-blur-xl border-b border-gold/15 px-4 py-3 flex items-center justify-between">
+      <div className="lg:hidden sticky top-0 z-30 pt-safe bg-night/95 backdrop-blur-xl border-b border-gold/15 px-4 py-3 flex items-center justify-between">
         <Link href="/admin" className="flex items-center gap-2">
           <div className="h-9 w-9 rounded-lg overflow-hidden ring-1 ring-gold/40">
             <img
@@ -148,10 +148,10 @@ export function AdminSidebar() {
             <Button
               variant="ghost"
               size="icon"
-              className="text-cream hover:bg-gold/10 hover:text-gold"
+              className="text-cream hover:bg-gold/10 hover:text-gold h-11 w-11"
               aria-label="Ouvrir le menu admin"
             >
-              <Menu className="h-5 w-5" />
+              <Menu className="h-6 w-6" />
             </Button>
           </SheetTrigger>
           <SheetContent side="left" className="w-72 bg-night-gradient border-r border-gold/15 p-0">
@@ -162,10 +162,10 @@ export function AdminSidebar() {
                 <Button
                   variant="ghost"
                   size="icon"
-                  className="text-cream hover:bg-gold/10 hover:text-gold"
+                  className="text-cream hover:bg-gold/10 hover:text-gold h-11 w-11"
                   aria-label="Fermer le menu"
                 >
-                  <X className="h-5 w-5" />
+                  <X className="h-6 w-6" />
                 </Button>
               </SheetClose>
             </div>

@@ -52,7 +52,6 @@ export function whatsappLink(number: string, message?: string) {
 export type ServiceItem = {
   id: string;
   icon: LucideIcon;
-  emoji: string;
   title: string;
   short: string;
   description: string;
@@ -65,7 +64,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "production-evenementielle",
     icon: Mic2,
-    emoji: "🎤",
     title: "Production événementielle",
     short:
       "Conception et organisation de concerts, festivals, campagnes, spectacles, conférences et grands événements.",
@@ -83,7 +81,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "production-artistique",
     icon: Palette,
-    emoji: "🎨",
     title: "Production artistique",
     short:
       "Accompagnement d'artistes, conception de projets musicaux et scéniques, coordination artistique et développement de carrières.",
@@ -101,7 +98,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "communication-visibilite",
     icon: Megaphone,
-    emoji: "📢",
     title: "Communication & visibilité",
     short:
       "Création de stratégies de communication, supports promotionnels, visibilité des marques et activation de partenariats.",
@@ -119,7 +115,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "partenariats-sponsoring",
     icon: Handshake,
-    emoji: "🤝",
     title: "Partenariats & sponsoring",
     short:
       "Mise en relation entre projets, marques, entreprises et institutions autour de collaborations créatrices de valeur.",
@@ -137,7 +132,6 @@ export const SERVICES: ServiceItem[] = [
   {
     id: "logistique-evenementielle",
     icon: Truck,
-    emoji: "🚚",
     title: "Logistique événementielle",
     short:
       "Coordination des besoins techniques, sonorisation, scène, espaces, accueil, sécurité, transport et autres dispositifs nécessaires à la réussite d'un événement.",

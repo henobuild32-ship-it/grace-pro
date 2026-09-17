@@ -349,3 +349,73 @@ Stage Summary:
 - Accessibility: `prefers-reduced-motion` honoured, 44px+ touch targets, semantic HTML, ARIA labels, sr-only content.
 - Responsive: works perfectly at 375px / 768px / 1280px / 1920px viewports in both portrait and landscape.
 - All admin pages work on mobile (Sheet sidebar with hamburger menu).
+
+---
+Task ID: 27-33
+Agent: main
+Task: Phase 6 — Remove AI emojis, remove CSV exports, fix all buttons, complete all forms, optimise admin for mobile.
+
+Work Log:
+- **Removed all AI emojis** from the services section:
+  - Removed the `<span>{service.emoji}</span>` element from `services.tsx`.
+  - Removed the `emoji: string` field and all `emoji: "..."` values from `data.ts` (Python script to handle UTF-8 emoji chars that sed couldn't process).
+  - Verified via VLM: "No AI emojis (🎤🎨📢🤝🚚) visible on the service cards." ✓
+
+- **Removed CSV export** from the admin newsletter page:
+  - Deleted the `exportCSV()` function from `newsletter/page.tsx`.
+  - Removed the `<Download />` import and the "Export CSV" button.
+  - Only "Email tous (BCC)", "Actualiser", and per-subscriber "Supprimer" buttons remain.
+  - Verified via Agent Browser: only 3 buttons present (no Export CSV). ✓
+
+- **Created real legal pages** for the footer links:
+  - `src/app/(public)/mentions-legales/page.tsx` — 6 sections: Éditeur, Hébergement, Propriété intellectuelle, Données personnelles, Responsabilité, Contact. Includes WhatsApp link, email link, cross-link to confidentialité.
+  - `src/app/(public)/confidentialite/page.tsx` — 6 sections: Données collectées, Finalité, Conservation, Partage, Vos droits, Cookies.
+  - Updated footer: converted `<a href="#">` to `<Link href="/mentions-legales">` and `<Link href="/confidentialite">`. ✓
+  - Verified via Agent Browser: both pages load (200), all sections render. ✓
+
+- **Fixed all buttons across the site**:
+  - Footer "Mentions légales" + "Politique de confidentialité" → now real `<Link>` to legal pages (were dead `href="#"`).
+  - Footer "Haut de page" → converted from `<a href="#">` to a semantic `<button type="button">` with `onClick` scrolling to top. Verified: scrolls from 1330px → 0. ✓
+  - Hero scroll indicator → converted from `<motion.div>` (non-interactive) to `<motion.button type="button">` with `onClick` scrolling down 90% of viewport. Added `aria-label="Faire défiler vers le bas"`. Verified: scrolls from 0 → 720px. ✓
+  - No remaining `href="#"` dead links in the codebase.
+
+- **Improved admin mobile responsiveness**:
+  - Bumped all admin action buttons from `h-9` (36px) to `h-11 sm:h-9` (44px on mobile, 36px on desktop) — meets iOS HIG / Android Material touch target minimum.
+  - Bumped admin dialog action buttons from `h-10` (40px) to `h-11 sm:h-10` (44px on mobile).
+  - Admin mobile top bar: added `pt-safe` for iOS notch, hamburger button now `h-11 w-11` with `Menu` icon at `h-6 w-6` (was h-9 / h-5), close button `h-11 w-11` with `X` at `h-6 w-6`.
+  - Admin main content: added `pb-safe` for iOS home indicator.
+  - Newsletter input + subscribe button: bumped to `h-11 sm:h-10` for mobile touch targets.
+
+- **Enhanced all forms for completeness and accessibility**:
+  - **Login form** (`/connexion`):
+    - Added `submitting` state with `setSubmitting(true/false)` in try/finally.
+    - Submit button now `disabled={submitting}` with loading spinner + "Connexion en cours..." text.
+    - Added `aria-invalid={!!errors.email}` and `aria-invalid={!!errors.password}` to inputs.
+  - **Contact form** (`/contact`):
+    - Added `aria-invalid` to all 4 fields (name, email, phone, message).
+  - **Partnership form** (`/partenaires`):
+    - Added `aria-invalid` to all 5 fields (company, contactName, email, phone, message).
+  - **Newsletter form** (footer):
+    - Added `noValidate` to disable browser native validation.
+    - Added client-side email regex validation (`/^[^\s@]+@[^\s@]+\.[^\s@]+$/`).
+    - Two distinct error toasts: "Email requis" (empty) and "Email invalide" (bad format) before calling the API.
+    - Verified: invalid email "invalid-email" → no API call, client-side validation caught it (toast shown). ✓
+    - Verified: valid email "test@example.com" → `POST /api/newsletter 201` + Prisma INSERT succeeded. ✓
+    - Better `aria-label`: "Votre adresse email pour la newsletter".
+
+- Verification (Agent Browser + VLM at mobile 375px + desktop 1280px):
+  - Mobile (375x667): no AI emojis, layout clean & mobile-optimised, buttons properly sized for touch. ✓
+  - Admin on mobile (375x667): dashboard loads after login, stat cards stacked vertically, "Ouvrir le menu admin" button present and opens Sheet with all 4 admin nav items + logout. ✓
+  - Admin newsletter on mobile: no Export CSV button (removed). ✓
+  - Legal pages: `/mentions-legales` (200, 6 sections) and `/confidentialite` (200, 6 sections) load correctly. ✓
+  - Footer back-to-top button: scrolls 1330px → 0. ✓
+  - Hero scroll indicator: scrolls 0 → 720px (one viewport). ✓
+  - Newsletter validation: invalid email blocked client-side (no API call), valid email → 201. ✓
+  - `bun run lint` clean.
+
+Stage Summary:
+- All AI emojis removed (services section + data.ts).
+- All CSV exports removed from admin.
+- All buttons now functional: no more dead `href="#"` links; footer legal links go to real pages; back-to-top and hero scroll indicator are proper buttons that work.
+- All forms are complete and accessible: loading states, client-side validation, aria-invalid, error/success toasts, reset after submit.
+- Admin interface fully mobile-optimised: 44px+ touch targets on mobile, safe-area insets (notch + home indicator), larger hamburger/close buttons, responsive button heights.

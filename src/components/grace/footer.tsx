@@ -16,7 +16,24 @@ export function Footer() {
     const form = e.currentTarget
     const input = form.elements.namedItem('email') as HTMLInputElement
     const email = input?.value?.trim()
-    if (!email) return
+    if (!email) {
+      toast({
+        title: 'Email requis',
+        description: 'Veuillez saisir votre adresse email.',
+        variant: 'destructive',
+      })
+      return
+    }
+    // Basic client-side email validation
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/
+    if (!emailRegex.test(email)) {
+      toast({
+        title: 'Email invalide',
+        description: 'Veuillez saisir une adresse email valide.',
+        variant: 'destructive',
+      })
+      return
+    }
     try {
       const res = await fetch('/api/newsletter', {
         method: 'POST',
@@ -157,19 +174,19 @@ export function Footer() {
             <p className="text-xs text-cream/60">
               Recevez nos actualités, lancements de projets et opportunités de partenariat.
             </p>
-            <form onSubmit={handleNewsletter} className="space-y-2">
+            <form onSubmit={handleNewsletter} className="space-y-2" noValidate>
               <Input
                 name="email"
                 type="email"
                 placeholder="Votre email"
                 required
-                className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold h-10"
-                aria-label="Email pour la newsletter"
+                aria-label="Votre adresse email pour la newsletter"
+                className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold h-11 sm:h-10"
               />
               <Button
                 type="submit"
                 size="sm"
-                className="w-full bg-gold-gradient text-night hover:opacity-90 font-semibold h-10"
+                className="w-full bg-gold-gradient text-night hover:opacity-90 font-semibold h-11 sm:h-10"
               >
                 <Sparkles className="mr-2 h-3.5 w-3.5" />
                 S'inscrire
@@ -197,28 +214,25 @@ export function Footer() {
             © {SITE.year} {SITE.name}. Tous droits réservés.
           </p>
           <div className="flex items-center gap-4 text-xs text-cream/40">
-            <a href="#" className="hover:text-gold transition-colors">
+            <Link href="/mentions-legales" className="hover:text-gold transition-colors">
               Mentions légales
-            </a>
+            </Link>
             <span className="text-gold/30">|</span>
-            <a href="#" className="hover:text-gold transition-colors">
+            <Link href="/confidentialite" className="hover:text-gold transition-colors">
               Politique de confidentialité
-            </a>
+            </Link>
           </div>
-          <a
-            href="#"
-            onClick={(e) => {
-              e.preventDefault();
-              window.scrollTo({ top: 0, behavior: 'smooth' })
-            }}
-            className="inline-flex items-center gap-2 text-xs text-cream/60 hover:text-gold transition-colors group"
+          <button
+            type="button"
+            onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+            className="inline-flex items-center gap-2 text-xs text-cream/60 hover:text-gold transition-colors group bg-transparent border-0 cursor-pointer p-0"
             aria-label="Revenir en haut"
           >
             Haut de page
             <span className="h-8 w-8 rounded-full border border-gold/30 flex items-center justify-center group-hover:bg-gold-gradient group-hover:text-night group-hover:border-gold transition-all">
               <ArrowUp className="h-3.5 w-3.5" />
             </span>
-          </a>
+          </button>
         </div>
       </div>
     </footer>

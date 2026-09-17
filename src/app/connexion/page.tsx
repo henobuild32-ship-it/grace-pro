@@ -28,6 +28,8 @@ export default function ConnexionPage() {
   const [showPassword, setShowPassword] = useState(false)
   const [prefilledEmail, setPrefilledEmail] = useState('')
 
+  const [submitting, setSubmitting] = useState(false)
+
   const {
     register,
     handleSubmit,
@@ -47,6 +49,7 @@ export default function ConnexionPage() {
   }, [])
 
   const onSubmit = async (values: LoginValues) => {
+    setSubmitting(true)
     try {
       const res = await fetch('/api/auth/login', {
         method: 'POST',
@@ -69,6 +72,8 @@ export default function ConnexionPage() {
         description: err instanceof Error ? err.message : 'Réessayez plus tard.',
         variant: 'destructive',
       })
+    } finally {
+      setSubmitting(false)
     }
   }
 
@@ -136,6 +141,7 @@ export default function ConnexionPage() {
                     type="email"
                     placeholder="admin@graceproduction.cd"
                     autoComplete="email"
+                    aria-invalid={!!errors.email}
                     {...register('email')}
                     defaultValue={prefilledEmail}
                     className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold pl-10"
@@ -157,6 +163,7 @@ export default function ConnexionPage() {
                     type={showPassword ? 'text' : 'password'}
                     placeholder="••••••••"
                     autoComplete="current-password"
+                    aria-invalid={!!errors.password}
                     {...register('password')}
                     className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold pl-10 pr-10"
                   />
@@ -176,11 +183,21 @@ export default function ConnexionPage() {
 
               <Button
                 type="submit"
+                disabled={submitting}
                 className="w-full bg-gold-gradient text-night hover:opacity-90 font-semibold h-12 text-base"
               >
-                <Sparkles className="mr-2 h-4 w-4" />
-                Se connecter
-                <ArrowRight className="ml-2 h-4 w-4" />
+                {submitting ? (
+                  <>
+                    <span className="h-4 w-4 mr-2 animate-spin rounded-full border-2 border-night border-t-transparent" />
+                    Connexion en cours...
+                  </>
+                ) : (
+                  <>
+                    <Sparkles className="mr-2 h-4 w-4" />
+                    Se connecter
+                    <ArrowRight className="ml-2 h-4 w-4" />
+                  </>
+                )}
               </Button>
             </form>
 

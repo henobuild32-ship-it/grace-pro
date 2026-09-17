@@ -147,12 +147,15 @@ export function Hero() {
         </motion.div>
       </div>
 
-      {/* Scroll indicator */}
-      <motion.div
+      {/* Scroll indicator — clickable to scroll down */}
+      <motion.button
+        type="button"
+        onClick={() => window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' })}
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-cream/60"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-cream/60 hover:text-gold transition-colors bg-transparent border-0 cursor-pointer p-2"
+        aria-label="Faire défiler vers le bas"
       >
         <span className="text-[10px] uppercase tracking-[0.3em] hidden sm:block">Défiler</span>
         <motion.div
@@ -162,7 +165,7 @@ export function Hero() {
         >
           <div className="h-1.5 w-1.5 rounded-full bg-gold" />
         </motion.div>
-      </motion.div>
+      </motion.button>
     </section>
   )
 }

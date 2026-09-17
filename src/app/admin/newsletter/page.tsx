@@ -7,7 +7,6 @@ import {
   RefreshCw,
   AlertCircle,
   Trash2,
-  Download,
   Mail,
   Calendar,
 } from 'lucide-react'
@@ -76,22 +75,6 @@ export default function AdminNewsletterPage() {
     }
   }
 
-  const exportCSV = () => {
-    const headers = ['Email', 'Date inscription']
-    const rows = subscribers.map((s) => [s.email, formatDate(s.createdAt)])
-    const csv = [headers, ...rows]
-      .map((row) => row.map((c) => `"${String(c).replace(/"/g, '""')}"`).join(','))
-      .join('\n')
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' })
-    const url = URL.createObjectURL(blob)
-    const a = document.createElement('a')
-    a.href = url
-    a.download = `newsletter-grace-production-${new Date().toISOString().slice(0, 10)}.csv`
-    a.click()
-    URL.revokeObjectURL(url)
-    toast({ title: 'Export CSV généré', description: `${subscribers.length} abonnés exportés.` })
-  }
-
   const mailtoAll = () => {
     const emails = subscribers.map((s) => s.email).join(',')
     window.location.href = `mailto:?bcc=${emails}`
@@ -112,7 +95,7 @@ export default function AdminNewsletterPage() {
             size="sm"
             onClick={mailtoAll}
             disabled={subscribers.length === 0}
-            className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-9"
+            className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-11 sm:h-9"
           >
             <Mail className="h-4 w-4 mr-2" />
             Email tous (BCC)
@@ -120,18 +103,8 @@ export default function AdminNewsletterPage() {
           <Button
             variant="outline"
             size="sm"
-            onClick={exportCSV}
-            disabled={subscribers.length === 0}
-            className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-9"
-          >
-            <Download className="h-4 w-4 mr-2" />
-            Export CSV
-          </Button>
-          <Button
-            variant="outline"
-            size="sm"
             onClick={fetchSubscribers}
-            className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-9"
+            className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-11 sm:h-9"
           >
             <RefreshCw className={cn('h-4 w-4 mr-2', loading && 'animate-spin')} />
             Actualiser
@@ -199,7 +172,7 @@ export default function AdminNewsletterPage() {
                       variant="ghost"
                       size="icon"
                       onClick={() => deleteSubscriber(s.id, s.email)}
-                      className="text-red-300/70 hover:text-red-300 hover:bg-red-500/10 h-9 w-9"
+                      className="text-red-300/70 hover:text-red-300 hover:bg-red-500/10 h-11 w-11 sm:h-9 sm:w-9"
                       aria-label={`Supprimer ${s.email}`}
                     >
                       <Trash2 className="h-4 w-4" />

@@ -255,6 +255,7 @@ export function Contact() {
                 <Input
                   id="name"
                   placeholder="Prénom & Nom"
+                  aria-invalid={!!errors.name}
                   {...register('name')}
                   className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
                 />
@@ -268,6 +269,7 @@ export function Contact() {
                   id="email"
                   type="email"
                   placeholder="vous@email.com"
+                  aria-invalid={!!errors.email}
                   {...register('email')}
                   className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
                 />
@@ -284,6 +286,7 @@ export function Contact() {
                   id="phone"
                   type="tel"
                   placeholder="+243 ..."
+                  aria-invalid={!!errors.phone}
                   {...register('phone')}
                   className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
                 />
@@ -322,6 +325,7 @@ export function Contact() {
               <Textarea
                 id="message"
                 rows={6}
+                aria-invalid={!!errors.message}
                 placeholder="Décrivez votre projet, votre demande ou votre question..."
                 {...register('message')}
                 className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold resize-none"

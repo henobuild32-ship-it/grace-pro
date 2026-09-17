@@ -76,10 +76,6 @@ export function Services() {
                   <div className="absolute top-4 left-4 h-12 w-12 rounded-xl bg-gold-gradient flex items-center justify-center gold-glow">
                     <Icon className="h-6 w-6 text-night" />
                   </div>
-                  {/* Emoji */}
-                  <span className="absolute top-4 right-4 text-2xl opacity-90" aria-hidden>
-                    {service.emoji}
-                  </span>
                 </div>
 
                 {/* Content */}

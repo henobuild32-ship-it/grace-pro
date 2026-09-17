@@ -269,6 +269,7 @@ export function PartnershipForm() {
               <Input
                 id="company"
                 placeholder="Ex. Fondation Hope"
+                aria-invalid={!!errors.company}
                 {...register('company')}
                 className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
               />
@@ -283,6 +284,7 @@ export function PartnershipForm() {
               <Input
                 id="contactName"
                 placeholder="Prénom & Nom"
+                aria-invalid={!!errors.contactName}
                 {...register('contactName')}
                 className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
               />
@@ -301,6 +303,7 @@ export function PartnershipForm() {
                 id="email"
                 type="email"
                 placeholder="vous@entreprise.com"
+                aria-invalid={!!errors.email}
                 {...register('email')}
                 className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
               />
@@ -314,6 +317,7 @@ export function PartnershipForm() {
                 id="phone"
                 type="tel"
                 placeholder="+243 ..."
+                aria-invalid={!!errors.phone}
                 {...register('phone')}
                 className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold"
               />
@@ -355,6 +359,7 @@ export function PartnershipForm() {
             <Textarea
               id="message"
               rows={5}
+              aria-invalid={!!errors.message}
               placeholder="Décrivez votre projet, vos objectifs, les modalités envisagées..."
               {...register('message')}
               className="bg-night/60 border-gold/25 text-cream placeholder:text-cream/40 focus:border-gold resize-none"

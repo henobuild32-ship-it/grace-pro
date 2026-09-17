@@ -196,7 +196,7 @@ export default function AdminMessagesPage() {
           variant="outline"
           size="sm"
           onClick={fetchMessages}
-          className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-9"
+          className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-11 sm:h-9"
         >
           <RefreshCw className={cn('h-4 w-4 mr-2', loading && 'animate-spin')} />
           Actualiser
@@ -291,7 +291,7 @@ export default function AdminMessagesPage() {
                         size="sm"
                         variant="outline"
                         onClick={() => markAsRead(message)}
-                        className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-9 text-xs"
+                        className="border-gold/30 text-cream hover:bg-gold/10 hover:text-gold h-11 sm:h-9 text-xs"
                       >
                         <ChevronDown className="h-3.5 w-3.5 mr-1" />
                         Ouvrir
@@ -300,7 +300,7 @@ export default function AdminMessagesPage() {
                         size="sm"
                         variant="ghost"
                         onClick={() => deleteMessage(message.id)}
-                        className="text-red-300/70 hover:text-red-300 hover:bg-red-500/10 h-9 text-xs"
+                        className="text-red-300/70 hover:text-red-300 hover:bg-red-500/10 h-11 sm:h-9 text-xs"
                       >
                         <Trash2 className="h-3.5 w-3.5" />
                       </Button>
@@ -391,7 +391,7 @@ export default function AdminMessagesPage() {
                 <Button
                   onClick={sendReply}
                   disabled={!replyText.trim() || updating}
-                  className="bg-gold-gradient text-night hover:opacity-90 font-semibold h-10"
+                  className="bg-gold-gradient text-night hover:opacity-90 font-semibold h-11 sm:h-10"
                 >
                   <Send className="h-4 w-4 mr-2" />
                   Envoyer la réponse
@@ -400,7 +400,7 @@ export default function AdminMessagesPage() {
                   variant="outline"
                   onClick={() => updateStatus(selectedMessage.id, 'replied')}
                   disabled={updating || selectedMessage.status === 'replied'}
-                  className="border-green-500/40 text-green-300 hover:bg-green-500/10 h-10"
+                  className="border-green-500/40 text-green-300 hover:bg-green-500/10 h-11 sm:h-10"
                 >
                   <Reply className="h-4 w-4 mr-2" />
                   Marquer répondu
@@ -409,7 +409,7 @@ export default function AdminMessagesPage() {
                   variant="outline"
                   onClick={() => updateStatus(selectedMessage.id, 'archived')}
                   disabled={updating || selectedMessage.status === 'archived'}
-                  className="border-cream/30 text-cream/70 hover:bg-white/5 h-10"
+                  className="border-cream/30 text-cream/70 hover:bg-white/5 h-11 sm:h-10"
                 >
                   <Archive className="h-4 w-4 mr-2" />
                   Archiver
@@ -418,7 +418,7 @@ export default function AdminMessagesPage() {
                   variant="outline"
                   onClick={() => updateStatus(selectedMessage.id, 'read')}
                   disabled={updating || selectedMessage.status === 'read'}
-                  className="border-blue-500/40 text-blue-300 hover:bg-blue-500/10 h-10"
+                  className="border-blue-500/40 text-blue-300 hover:bg-blue-500/10 h-11 sm:h-10"
                 >
                   <Check className="h-4 w-4 mr-2" />
                   Marquer lu

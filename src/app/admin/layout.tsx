@@ -13,7 +13,7 @@ export default async function AdminLayout({
     <div className="min-h-screen bg-night flex">
       <AdminSidebar />
       <div className="flex-1 flex flex-col min-w-0">
-        <main className="flex-1 p-4 md:p-8 overflow-x-hidden">
+        <main className="flex-1 p-4 md:p-8 overflow-x-hidden pb-safe">
           <div className="container mx-auto max-w-6xl">
             {/* Hidden session indicator for server-side */}
             <span className="sr-only">Session active : {session.email}</span>
