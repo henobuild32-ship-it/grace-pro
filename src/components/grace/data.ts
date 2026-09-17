@@ -39,7 +39,7 @@ export const SITE = {
   hours: "Lundi – Samedi, 8h – 18h",
   instagram: "https://www.instagram.com/graceproduction01/",
   facebook: "https://www.facebook.com/profile.php?id=61556017321267",
-  year: 2025,
+  year: 2026,
 }
 
 // Helper to build a WhatsApp link with a pre-filled message

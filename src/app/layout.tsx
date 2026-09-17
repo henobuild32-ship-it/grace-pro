@@ -2,7 +2,6 @@ import type { Metadata, Viewport } from "next";
 import { Playfair_Display, Inter } from "next/font/google";
 import "./globals.css";
 import { Toaster } from "@/components/ui/toaster";
-import { ThemeProvider } from "@/components/theme-provider";
 import { ServiceWorkerRegister } from "@/components/grace/sw-register";
 
 const playfair = Playfair_Display({
@@ -142,11 +141,9 @@ export default function RootLayout({
       <body
         className={`${playfair.variable} ${inter.variable} antialiased bg-background text-foreground font-sans`}
       >
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          {children}
-          <Toaster />
-          <ServiceWorkerRegister />
-        </ThemeProvider>
+        {children}
+        <Toaster />
+        <ServiceWorkerRegister />
       </body>
     </html>
   );

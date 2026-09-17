@@ -30,7 +30,6 @@ export function About() {
         size={560}
         rotate={12}
         position="top-right"
-        blend="screen"
       />
 
       <div className="container mx-auto max-w-7xl px-4 md:px-8 relative">
@@ -61,9 +60,9 @@ export function About() {
               transition={{ delay: 0.4 }}
               className="absolute -bottom-6 -right-2 md:right-6 glass-card rounded-2xl p-5 max-w-[220px] gold-glow"
             >
-              <p className="font-display text-3xl font-bold text-gold leading-none">+10 ans</p>
+              <p className="font-display text-3xl font-bold text-gold leading-none">10+</p>
               <p className="text-xs text-cream/70 mt-2">
-                d'expérience cumulée en production & événementiel
+                d&apos;expérience cumulée en production &amp; événementiel
               </p>
             </motion.div>
           </motion.div>

@@ -1,6 +1,6 @@
 'use client'
 
-import { useState, useEffect } from 'react'
+import { Suspense, useState, useEffect } from 'react'
 import Link from 'next/link'
 import { useRouter, useSearchParams } from 'next/navigation'
 import { motion } from 'framer-motion'
@@ -12,7 +12,7 @@ import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Label } from '@/components/ui/label'
 import { useToast } from '@/hooks/use-toast'
-import { SITE, LOGO_PATH } from '@/components/grace/data'
+import { LOGO_PATH } from '@/components/grace/data'
 
 const loginSchema = z.object({
   email: z.string().email('Email invalide'),
@@ -21,7 +21,7 @@ const loginSchema = z.object({
 
 type LoginValues = z.infer<typeof loginSchema>
 
-export default function ConnexionPage() {
+function ConnexionForm() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const { toast } = useToast()
@@ -201,18 +201,27 @@ export default function ConnexionPage() {
               </Button>
             </form>
 
-            <p className="text-[11px] text-cream/40 text-center mt-6">
-              Accès réservé à l'administrateur de {SITE.name}.
-              <br />
-              Identifiants par défaut : <span className="text-gold/70">admin@graceproduction.cd</span> / <span className="text-gold/70">Grace@2025</span>
+            <p
+              suppressHydrationWarning
+              className="text-[11px] text-cream/40 text-center mt-6"
+            >
+              Accès réservé à l&apos;administrateur de Grace Production.
             </p>
           </div>
 
           <p className="text-center text-[11px] text-cream/40 mt-4">
-            Protégé par cookie httpOnly signé HS256 • Session 8h
+            GRACE PRODUCTION
           </p>
         </motion.div>
       </main>
     </div>
+  )
+}
+
+export default function ConnexionPage() {
+  return (
+    <Suspense>
+      <ConnexionForm />
+    </Suspense>
   )
 }
