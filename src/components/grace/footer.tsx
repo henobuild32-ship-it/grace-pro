@@ -40,7 +40,7 @@ export function Footer() {
   }
 
   return (
-    <footer className="relative bg-night border-t border-gold/15 overflow-hidden">
+    <footer className="relative bg-night border-t border-gold/15 overflow-hidden pb-safe">
       {/* Decorative gradient */}
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-px w-3/4 bg-gradient-to-r from-transparent via-gold to-transparent" />
       <div className="absolute top-0 left-1/2 -translate-x-1/2 h-40 w-2/3 bg-gold/5 blur-[80px] pointer-events-none" />

@@ -269,3 +269,83 @@ Stage Summary:
 - ONLY the official Grace Production logo now appears as the background decoration across the hero, partners CTA, and contact sections.
 - Logo watermark is elegant: large, centered, soft radial mask (no hard edges), gold glow halo, premium dark gradient background.
 - Content images (festival posters inside the About card, project cards, service cards, project galleries) remain as content — NOT as backgrounds. These are intentional content visuals, not background posters.
+
+---
+Task ID: 21-26
+Agent: main
+Task: Phase 5 — Ultra-complete PWA + mobile/tablet/desktop/ultra-wide responsive + iOS/Android optimisations.
+
+Work Log:
+- Created `scripts/generate-pwa-icons.cjs` (Node.js + sharp script) that:
+  - Extracts the top-center 800x800 square (the G emblem) from the official 1600x800 logo.
+  - Generates standard PNG icons at 192/256/384/512 (purpose: any).
+  - Generates maskable icons at 192/512 with 10% safe padding on a #0d0d0d background (purpose: maskable — Android adaptive icons).
+  - Generates `apple-touch-icon.png` (180x180, white background flattened).
+  - Generates `favicon-16.png` + `favicon-32.png`.
+  - Generates `og-image.png` (1200x630 social sharing image — full landscape logo on dark background).
+  All 10 icons saved to `/public/icons/`. Verified via VLM that the icon correctly shows the G emblem.
+
+- Created `public/manifest.webmanifest` — full PWA manifest:
+  - `name`, `short_name` (GraceProd), `description`, `start_url`, `scope`, `display: standalone`.
+  - `orientation: portrait-primary`, `background_color: #0d0d0d`, `theme_color: #0d0d0d`.
+  - `lang: fr`, `categories: [business, entertainment, events]`.
+  - 6 icon entries (any + maskable at 192/512).
+  - 3 app shortcuts (Projets, Partenaires, Contact) for Android long-press menu.
+  - 1 wide screenshot (og-image.png).
+
+- Rewrote `src/app/layout.tsx` with full PWA metadata:
+  - `export const viewport: Viewport` with `width: device-width`, `initialScale: 1`, `maximumScale: 5`, `viewportFit: cover` (for iOS safe areas), `themeColor` (light/dark), `appleWebApp` config.
+  - `metadata.manifest`, `metadata.icons` (icon + shortcut + apple at multiple sizes), `metadata.appleWebApp`, `metadata.formatDetection`, OpenGraph + Twitter cards.
+  - `metadata.other` includes `mobile-web-app-capable`, `apple-mobile-web-app-capable`, `apple-mobile-web-app-status-bar-style`, `apple-mobile-web-app-title`, `application-name`, `msapplication-TileColor`.
+  - Explicit `<link rel="apple-touch-icon">` tags at 152/180 in the `<head>`.
+  - Added `<ServiceWorkerRegister />` component to register the service worker.
+
+- Created `public/sw.js` — minimal PWA service worker:
+  - Precaches `/`, `/manifest.webmanifest`, `/icons/favicon-32.png`, `/icons/apple-touch-icon.png`, `/icons/icon-192.png` on install.
+  - Cleans up old caches on activate.
+  - Fetch handler: network-first for navigation (HTML), cache-first for static assets (images/CSS/JS/fonts). Skips cross-origin, API requests, and HMR.
+  - Enables offline support + the Android Chrome install prompt.
+
+- Created `src/components/grace/sw-register.tsx` — client component that registers `/sw.js` after `load` event. Enabled in dev via `NEXT_PUBLIC_SW_DEV=1` env var (production auto-registers).
+
+- Updated `src/app/globals.css` with mobile-first optimisations:
+  - `html`: `-webkit-text-size-adjust: 100%` (prevents iOS text inflation on orientation change).
+  - `body`: `overflow-x: hidden` (no horizontal scroll), `-webkit-tap-highlight-color: transparent` (no iOS grey tap flash), `touch-action: manipulation` (no double-tap zoom), `-webkit-font-smoothing: antialiased`, `padding-left/right: env(safe-area-inset-*)` (iPhone notch safe areas).
+  - `img`: `-webkit-user-drag: none`, `user-select: none`, `-webkit-touch-callout: none` (no iOS image callout).
+  - `a, button, [role=button]`: `touch-action: manipulation`.
+  - `@media (prefers-reduced-motion: reduce)` — disables all animations/transitions for accessibility + battery.
+  - `@media (max-height: 500px) and (orientation: landscape)` — reduces section padding in landscape phones (short height).
+  - Added utilities: `.pt-safe`, `.pb-safe`, `.pl-safe`, `.pr-safe`, `.mt-safe`, `.mb-safe`, `.h-safe-bottom` (env safe-area-inset helpers).
+  - Added `.line-clamp-1/2/3` helpers (webkit box clamp).
+  - Added `.hide-on-mobile` + `.show-on-mobile-only` responsive display utilities.
+
+- Added safe-area padding to Navbar (`pt-safe` — below iOS notch) and Footer (`pb-safe` — above home indicator).
+
+- Tuned hero title responsive sizing: `text-4xl sm:text-5xl md:text-7xl lg:text-8xl` (was `text-5xl sm:text-6xl` — slightly smaller on smallest screens to avoid overflow on 320px).
+- Tuned PageHeader title: `text-3xl sm:text-4xl md:text-6xl` (was `text-4xl md:text-6xl`).
+
+- Verification (Agent Browser + VLM at multiple viewports):
+  - Mobile iPhone SE (375x667): no horizontal overflow, navbar shows hamburger menu, hero title readable, layout stacked vertically. ✓
+  - Mobile menu opens with all 7 nav items + "Connexion Admin" link. ✓
+  - iPad (768x1024): no overflow, content scales properly. ✓
+  - Desktop (1280x800): balanced layout. ✓
+  - Ultra-wide (1920x1080): content centered with appropriate max-width, not stretched. ✓
+  - Landscape mobile (667x375): hero content visible without excessive scrolling, title readable. ✓
+  - Contact form on mobile (375x667): all fields (name, email, phone, subject, message) + submit button usable. ✓
+  - Admin login on mobile (375x667): form properly sized, centered, no horizontal scroll. ✓
+  - Admin dashboard on mobile: stat cards stacked vertically, "Ouvrir le menu admin" button present and opens sidebar Sheet with all 4 admin nav items + logout. ✓
+  - Service worker: `[PWA] Service worker registered: http://localhost:3000/` appears in console, no errors. ✓
+  - PWA meta tags verified in `<head>`: manifest, theme-color, apple-mobile-web-app-capable, apple-mobile-web-app-title, apple-touch-icon, viewport with viewport-fit=cover. ✓
+  - `curl` checks: manifest.webmanifest served (200), sw.js served (200, application/javascript), icon-192.png (200, 30KB), apple-touch-icon.png (200, 27KB). ✓
+  - `bun run lint` clean.
+
+Stage Summary:
+- Site is now a full PWA: installable on Android (Chrome) and iOS (Safari "Add to Home Screen").
+- 10 PWA icons generated from the official Grace Production logo (standard + maskable + apple-touch + favicon + og-image).
+- Manifest with shortcuts (Projets, Partenaires, Contact) for Android long-press menu.
+- Service worker enables offline support + satisfies Android Chrome install prompt requirements.
+- iOS-specific: safe-area insets (notch + home indicator), tap-highlight transparent, touch-callout disabled, text-size-adjust, apple-mobile-web-app-capable, status-bar-style black-translucent, apple-touch-icon (180x180).
+- Android-specific: theme-color, mobile-web-app-capable, maskable icons for adaptive shapes, manifest shortcuts.
+- Accessibility: `prefers-reduced-motion` honoured, 44px+ touch targets, semantic HTML, ARIA labels, sr-only content.
+- Responsive: works perfectly at 375px / 768px / 1280px / 1920px viewports in both portrait and landscape.
+- All admin pages work on mobile (Sheet sidebar with hamburger menu).

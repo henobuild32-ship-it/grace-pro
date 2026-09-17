@@ -64,7 +64,7 @@ export function PageHeader({
               {eyebrow}
             </span>
           )}
-          <h1 className="font-display text-4xl md:text-6xl font-bold text-cream leading-tight">
+          <h1 className="font-display text-3xl sm:text-4xl md:text-6xl font-bold text-cream leading-tight">
             {title} {highlight && <span className="text-gradient-gold">{highlight}</span>}
           </h1>
           {description && (

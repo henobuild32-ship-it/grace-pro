@@ -84,7 +84,7 @@ export function Hero() {
           initial={{ opacity: 0, y: 30 }}
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 1, delay: 0.6 }}
-          className="font-display font-black tracking-tight text-cream text-hero-shadow leading-[0.95] text-5xl sm:text-6xl md:text-7xl lg:text-8xl"
+          className="font-display font-black tracking-tight text-cream text-hero-shadow leading-[0.95] text-4xl sm:text-5xl md:text-7xl lg:text-8xl"
         >
           <span className="block">GRACE</span>
           <span className="block text-gradient-gold">PRODUCTION</span>
