@@ -2,17 +2,18 @@
 
 import * as React from 'react'
 import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
-import { Menu, X, Sparkles } from 'lucide-react'
+import { Menu, X, Sparkles, LogIn } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Sheet, SheetContent, SheetTrigger, SheetTitle, SheetClose } from '@/components/ui/sheet'
-import { NAV_ITEMS, SITE } from './data'
+import { NAV_ITEMS, SITE, LOGO_PATH } from './data'
 import { cn } from '@/lib/utils'
 
 export function Navbar() {
   const [scrolled, setScrolled] = useState(false)
-  const [activeSection, setActiveSection] = useState<string>('accueil')
   const [open, setOpen] = useState(false)
+  const pathname = usePathname()
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40)
@@ -21,94 +22,81 @@ export function Navbar() {
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
 
-  useEffect(() => {
-    const sectionIds = NAV_ITEMS.map((n) => n.id)
-    const observer = new IntersectionObserver(
-      (entries) => {
-        const visible = entries
-          .filter((e) => e.isIntersecting)
-          .sort((a, b) => b.intersectionRatio - a.intersectionRatio)
-        if (visible[0]) setActiveSection(visible[0].target.id)
-      },
-      { rootMargin: '-40% 0px -50% 0px', threshold: [0, 0.25, 0.5, 1] }
-    )
-    sectionIds.forEach((id) => {
-      const el = document.getElementById(id)
-      if (el) observer.observe(el)
-    })
-    return () => observer.disconnect()
-  }, [])
+  // Solid navbar on admin/login routes
+  const isAdmin = pathname.startsWith('/admin') || pathname === '/connexion'
 
-  const handleNavClick = (e: React.MouseEvent, id: string) => {
-    e.preventDefault()
-    setOpen(false)
-    const el = document.getElementById(id)
-    if (el) {
-      el.scrollIntoView({ behavior: 'smooth', block: 'start' })
-      history.replaceState(null, '', `#${id}`)
-    }
+  const isActive = (href: string) => {
+    if (href === '/') return pathname === '/'
+    return pathname === href || pathname.startsWith(href)
   }
 
   return (
     <header
       className={cn(
         'fixed top-0 left-0 right-0 z-50 transition-all duration-500',
-        scrolled
-          ? 'bg-night/85 backdrop-blur-xl border-b border-gold/15 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
+        scrolled || isAdmin
+          ? 'bg-night/90 backdrop-blur-xl border-b border-gold/15 py-3 shadow-[0_8px_30px_rgba(0,0,0,0.5)]'
           : 'bg-transparent py-5'
       )}
     >
       <div className="container mx-auto max-w-7xl px-4 md:px-8 flex items-center justify-between">
         {/* Logo */}
-        <a
-          href="#accueil"
-          onClick={(e) => handleNavClick(e, 'accueil')}
+        <Link
+          href="/"
           className="flex items-center gap-3 group"
           aria-label="Grace Production — Accueil"
         >
-          <div className="relative h-10 w-10 md:h-11 md:w-11 rounded-full bg-gold-gradient flex items-center justify-center gold-glow">
-            <span className="font-display font-black text-night text-xl md:text-2xl">G</span>
-            <div className="absolute inset-0 rounded-full ring-1 ring-gold/40" />
+          <div className="relative h-11 w-11 md:h-12 md:w-12 rounded-full overflow-hidden bg-gold/10 ring-1 ring-gold/40 gold-glow flex items-center justify-center">
+            <img
+              src={LOGO_PATH}
+              alt="Logo Grace Production"
+              className="h-full w-full object-cover"
+            />
           </div>
           <div className="flex flex-col leading-tight">
             <span className="font-display text-base md:text-lg font-bold tracking-wide text-cream">
               GRACE <span className="text-gold">PRODUCTION</span>
             </span>
-            <span className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-cream/50">
+            <span className="text-[10px] md:text-[11px] uppercase tracking-[0.2em] text-cream/50 hidden sm:block">
               {SITE.tagline}
             </span>
           </div>
-        </a>
+        </Link>
 
         {/* Desktop Nav */}
         <nav className="hidden lg:flex items-center gap-1" aria-label="Navigation principale">
           {NAV_ITEMS.map((item) => (
-            <a
-              key={item.id}
-              href={`#${item.id}`}
-              onClick={(e) => handleNavClick(e, item.id)}
+            <Link
+              key={item.href}
+              href={item.href}
               className={cn(
                 'nav-underline px-4 py-2 text-sm font-medium text-cream/80 hover:text-gold transition-colors',
-                activeSection === item.id && 'active text-gold'
+                isActive(item.href) && 'active text-gold'
               )}
             >
               {item.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
-        {/* CTA + Mobile menu */}
+        {/* CTA + Connexion + Mobile menu */}
         <div className="flex items-center gap-2">
+          <Link
+            href="/connexion"
+            className="hidden md:inline-flex items-center gap-1.5 text-sm font-medium text-cream/70 hover:text-gold transition-colors px-3 py-2 rounded-lg hover:bg-gold/5"
+          >
+            <LogIn className="h-4 w-4" />
+            Connexion
+          </Link>
           <Button
             asChild
             size="sm"
             className="hidden md:inline-flex bg-gold-gradient text-night hover:opacity-90 font-semibold shadow-lg shadow-gold/20"
-            onClick={(e) => handleNavClick(e as unknown as React.MouseEvent, 'partenaires')}
           >
-            <a href="#partenaires">
+            <Link href="/partenaires">
               <Sparkles className="mr-2 h-4 w-4" />
               Devenir partenaire
-            </a>
+            </Link>
           </Button>
 
           <Sheet open={open} onOpenChange={setOpen}>
@@ -142,35 +130,36 @@ export function Navbar() {
               </div>
               <nav className="flex flex-col p-4" aria-label="Navigation mobile">
                 {NAV_ITEMS.map((item) => (
-                  <a
-                    key={item.id}
-                    href={`#${item.id}`}
-                    onClick={(e) => handleNavClick(e, item.id)}
+                  <Link
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setOpen(false)}
                     className={cn(
                       'flex items-center gap-3 px-4 py-4 text-base font-medium rounded-xl transition-all',
-                      activeSection === item.id
+                      isActive(item.href)
                         ? 'bg-gold/10 text-gold border-l-2 border-gold'
                         : 'text-cream/80 hover:bg-white/5 hover:text-gold'
                     )}
                   >
                     {item.label}
-                  </a>
+                  </Link>
                 ))}
-                <a
-                  href="#partenaires"
-                  onClick={(e) => handleNavClick(e, 'partenaires')}
+                <Link
+                  href="/partenaires"
+                  onClick={() => setOpen(false)}
                   className="mt-4 inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl bg-gold-gradient text-night font-semibold"
                 >
                   <Sparkles className="h-4 w-4" />
                   Devenir partenaire
-                </a>
-                <a
-                  href="#contact"
-                  onClick={(e) => handleNavClick(e, 'contact')}
+                </Link>
+                <Link
+                  href="/connexion"
+                  onClick={() => setOpen(false)}
                   className="mt-3 inline-flex items-center justify-center gap-2 px-4 py-3.5 rounded-xl border border-gold/30 text-cream hover:bg-gold/10 transition-colors"
                 >
-                  Nous contacter
-                </a>
+                  <LogIn className="h-4 w-4" />
+                  Connexion Admin
+                </Link>
               </nav>
             </SheetContent>
           </Sheet>

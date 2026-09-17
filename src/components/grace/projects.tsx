@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Target, Users, Calendar, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -7,11 +8,6 @@ import { PROJECTS } from './data'
 import { cn } from '@/lib/utils'
 
 export function Projects() {
-  const scrollToPartners = (e: React.MouseEvent) => {
-    e.preventDefault()
-    document.getElementById('partenaires')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <section id="projets" className="relative section-pad bg-night overflow-hidden">
       {/* Decorative */}
@@ -101,6 +97,28 @@ export function Projects() {
                       {project.description}
                     </p>
 
+                    {/* Event info for Festival */}
+                    {project.eventInfo && (
+                      <div className="mt-5 rounded-2xl border border-gold/20 bg-gold/5 p-4 grid sm:grid-cols-2 gap-3 text-xs">
+                        <div className="flex items-center gap-2 text-cream/80">
+                          <Calendar className="h-4 w-4 text-gold shrink-0" />
+                          <span>{project.eventInfo.date}</span>
+                        </div>
+                        <div className="flex items-center gap-2 text-cream/80">
+                          <MapPin className="h-4 w-4 text-gold shrink-0" />
+                          <span>{project.eventInfo.venue}</span>
+                        </div>
+                        <div className="text-cream/70">
+                          <span className="text-gold font-semibold">Standard :</span>{' '}
+                          {project.eventInfo.ticketStandard}
+                        </div>
+                        <div className="text-cream/70">
+                          <span className="text-gold font-semibold">VIP :</span>{' '}
+                          {project.eventInfo.ticketVip}
+                        </div>
+                      </div>
+                    )}
+
                     {/* Objectives */}
                     <div className="mt-8">
                       <h4 className="flex items-center gap-2 text-xs font-semibold uppercase tracking-wider text-gold mb-3">
@@ -138,37 +156,51 @@ export function Projects() {
                       </div>
                     </div>
 
-                    {/* Meta */}
-                    <div className="mt-6 flex flex-wrap gap-x-6 gap-y-2 text-[11px] text-cream/50">
-                      <span className="inline-flex items-center gap-1.5">
-                        <MapPin className="h-3 w-3" /> Kinshasa, RDC
-                      </span>
-                      <span className="inline-flex items-center gap-1.5">
-                        <Calendar className="h-3 w-3" /> Édition 2025
-                      </span>
-                    </div>
-
                     {/* CTAs */}
                     <div className="mt-8 flex flex-wrap gap-3">
-                      <Button
-                        onClick={scrollToPartners}
-                        size="sm"
-                        className="bg-gold-gradient text-night hover:opacity-90 font-semibold h-11 px-5"
-                      >
-                        {project.cta}
-                        <ArrowRight className="ml-2 h-4 w-4" />
-                      </Button>
-                      <Button
-                        onClick={scrollToPartners}
-                        size="sm"
-                        variant="outline"
-                        className="border-gold/40 text-cream hover:bg-gold/10 hover:text-gold hover:border-gold bg-transparent h-11 px-5"
-                      >
-                        {project.ctaSecondary}
+                      {project.eventInfo && (
+                        <a
+                          href={project.eventInfo.ticketUrl}
+                          target="_blank"
+                          rel="noopener noreferrer"
+                          className="inline-flex items-center gap-2 h-11 px-5 rounded-xl bg-gold-gradient text-night hover:opacity-90 font-semibold text-sm"
+                        >
+                          Acheter un billet
+                          <ArrowRight className="h-4 w-4" />
+                        </a>
+                      )}
+                      <Button asChild size="sm" variant="outline" className="border-gold/40 text-cream hover:bg-gold/10 hover:text-gold hover:border-gold bg-transparent h-11 px-5">
+                        <Link href="/partenaires">
+                          {project.ctaSecondary}
+                        </Link>
                       </Button>
                     </div>
                   </div>
                 </div>
+
+                {/* Gallery */}
+                {project.gallery && project.gallery.length > 0 && (
+                  <div className="border-t border-gold/15 p-6 md:p-10">
+                    <h4 className="text-xs font-semibold uppercase tracking-wider text-gold mb-4">
+                      Galerie
+                    </h4>
+                    <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-5 gap-3">
+                      {project.gallery.map((g, idx) => (
+                        <div
+                          key={idx}
+                          className="relative aspect-[3/4] rounded-xl overflow-hidden border border-gold/15 hover:border-gold/40 transition-all group"
+                        >
+                          <img
+                            src={g}
+                            alt={`${project.title} — visuel ${idx + 1}`}
+                            className="h-full w-full object-cover transition-transform duration-500 group-hover:scale-105"
+                          />
+                          <div className="absolute inset-0 bg-gradient-to-t from-night/50 to-transparent opacity-0 group-hover:opacity-100 transition-opacity" />
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                )}
               </motion.article>
             )
           })}

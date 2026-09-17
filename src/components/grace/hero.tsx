@@ -1,21 +1,14 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowDown, Sparkles, PlayCircle } from 'lucide-react'
+import { ArrowRight, Sparkles, PlayCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { SITE } from './data'
+import { SITE, HERO_IMAGE } from './data'
 
 export function Hero() {
-  const scrollTo = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
-    <section
-      id="accueil"
-      className="relative min-h-screen flex items-center justify-center overflow-hidden bg-night"
-    >
+    <section className="relative min-h-screen flex items-center justify-center overflow-hidden bg-night">
       {/* Background image with overlays */}
       <div className="absolute inset-0">
         <motion.div
@@ -25,13 +18,13 @@ export function Hero() {
           className="absolute inset-0"
         >
           <img
-            src="/images/hero.png"
-            alt="Festival musical à Kinshasa — Grace Production"
+            src={HERO_IMAGE}
+            alt="Festival Père des Orphelins — Grace Production"
             className="h-full w-full object-cover"
           />
         </motion.div>
         {/* Gradient overlays for legibility */}
-        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/70 to-night/30" />
+        <div className="absolute inset-0 bg-gradient-to-t from-night via-night/75 to-night/30" />
         <div className="absolute inset-0 bg-gradient-to-r from-night/80 via-night/40 to-transparent" />
         <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(13,13,13,0.7)_100%)]" />
       </div>
@@ -107,22 +100,17 @@ export function Hero() {
           transition={{ duration: 1, delay: 1.3 }}
           className="mt-10 flex flex-col sm:flex-row items-center justify-center gap-4"
         >
-          <Button
-            size="lg"
-            onClick={scrollTo('projets')}
-            className="bg-gold-gradient text-night hover:opacity-90 font-semibold px-7 h-12 text-base shadow-xl shadow-gold/30"
-          >
-            Découvrir nos projets
-            <ArrowDown className="ml-2 h-4 w-4" />
+          <Button asChild size="lg" className="bg-gold-gradient text-night hover:opacity-90 font-semibold px-7 h-12 text-base shadow-xl shadow-gold/30">
+            <Link href="/projets">
+              Découvrir nos projets
+              <ArrowRight className="ml-2 h-4 w-4" />
+            </Link>
           </Button>
-          <Button
-            size="lg"
-            variant="outline"
-            onClick={scrollTo('a-propos')}
-            className="border-gold/40 text-cream hover:bg-gold/10 hover:text-gold hover:border-gold bg-transparent px-7 h-12 text-base"
-          >
-            <PlayCircle className="mr-2 h-4 w-4" />
-            En savoir plus
+          <Button asChild size="lg" variant="outline" className="border-gold/40 text-cream hover:bg-gold/10 hover:text-gold hover:border-gold bg-transparent px-7 h-12 text-base">
+            <Link href="/a-propos">
+              <PlayCircle className="mr-2 h-4 w-4" />
+              En savoir plus
+            </Link>
           </Button>
         </motion.div>
 
@@ -146,14 +134,11 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator */}
-      <motion.a
-        href="#a-propos"
-        onClick={scrollTo('a-propos')}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-cream/60 hover:text-gold transition-colors"
-        aria-label="Faire défiler vers le bas"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-cream/60"
       >
         <span className="text-[10px] uppercase tracking-[0.3em] hidden sm:block">Défiler</span>
         <motion.div
@@ -163,7 +148,7 @@ export function Hero() {
         >
           <div className="h-1.5 w-1.5 rounded-full bg-gold" />
         </motion.div>
-      </motion.a>
+      </motion.div>
     </section>
   )
 }

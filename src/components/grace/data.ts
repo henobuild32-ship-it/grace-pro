@@ -28,12 +28,25 @@ export const SITE = {
   tagline: "Production • Événementiel • Arts • Communication • Partenariats",
   location: "Kinshasa, République Démocratique du Congo",
   email: "contact@graceproduction.cd",
-  phone: "+243 000 000 000",
-  whatsapp: "+243 000 000 000",
+  phones: [
+    { label: "+243 831 199 435", value: "+243831199435", display: "+243 831 199 435" },
+    { label: "+243 991 674 122", value: "+243991674122", display: "+243 991 674 122" },
+  ],
+  whatsappNumbers: [
+    { display: "+243 831 199 435", waLink: "https://wa.me/243831199435" },
+    { display: "+243 991 674 122", waLink: "https://wa.me/243991674122" },
+  ],
   hours: "Lundi – Samedi, 8h – 18h",
   instagram: "https://www.instagram.com/graceproduction01/",
   facebook: "https://www.facebook.com/profile.php?id=61556017321267",
   year: 2025,
+}
+
+// Helper to build a WhatsApp link with a pre-filled message
+export function whatsappLink(number: string, message?: string) {
+  const clean = number.replace(/[^0-9]/g, "")
+  const base = `https://wa.me/${clean}`
+  return message ? `${base}?text=${encodeURIComponent(message)}` : base
 };
 
 export type ServiceItem = {
@@ -141,12 +154,23 @@ export const SERVICES: ServiceItem[] = [
   },
 ];
 
+export type ProjectEventInfo = {
+  date: string;
+  venue: string;
+  ticketStandard: string;
+  ticketVip: string;
+  ticketUrl: string;
+  partners: string[];
+};
+
 export type ProjectItem = {
   id: string;
   title: string;
   subtitle: string;
   description: string;
   image: string;
+  gallery?: string[];
+  eventInfo?: ProjectEventInfo;
   objectives: string[];
   audience: string[];
   cta: string;
@@ -161,7 +185,28 @@ export const PROJECTS: ProjectItem[] = [
     subtitle: "Art • Solidarité • Humanitaire",
     description:
       "Un projet à dimension artistique, sociale et humanitaire visant à mobiliser les communautés autour de la cause des enfants orphelins. À travers la musique, la sensibilisation et la mobilisation collective, le festival ambitionne de créer un espace où divertissement, solidarité et responsabilité sociale se rencontrent.",
-    image: "/images/festival-orphelins.png",
+    image: "/images/festival-1.jpeg",
+    gallery: [
+      "/images/festival-1.jpeg",
+      "/images/festival-2.jpeg",
+      "/images/festival-3.jpeg",
+      "/images/festival-4.jpeg",
+      "/images/festival-5.jpeg",
+    ],
+    eventInfo: {
+      date: "1er Novembre 2026, 12h00",
+      venue: "Terrain Shaumba, Kinshasa",
+      ticketStandard: "5 000 FC",
+      ticketVip: "10 $ (USD)",
+      ticketUrl: "https://sombaticket.com",
+      partners: [
+        "Grace Production",
+        "Inabiso Communication",
+        "USAFI",
+        "Somba Ticket",
+        "AAN — Amour Autour de Nous",
+      ],
+    },
     objectives: [
       "Sensibiliser le grand public à la cause des orphelins",
       "Mobiliser artistes, ONG, institutions et sponsors",
@@ -342,17 +387,29 @@ export const SOCIAL_LINKS = {
 };
 
 export const NAV_ITEMS = [
-  { id: "accueil", label: "Accueil" },
-  { id: "a-propos", label: "À propos" },
-  { id: "domaines", label: "Nos Domaines" },
-  { id: "projets", label: "Nos Projets" },
-  { id: "partenaires", label: "Partenaires" },
-  { id: "contact", label: "Contact" },
+  { href: "/", label: "Accueil" },
+  { href: "/a-propos", label: "À propos" },
+  { href: "/domaines", label: "Nos Domaines" },
+  { href: "/projets", label: "Nos Projets" },
+  { href: "/partenaires", label: "Partenaires" },
+  { href: "/contact", label: "Contact" },
 ];
 
 export const CONTACT_INFO = [
   { icon: MapPin, label: "Adresse", value: SITE.location },
   { icon: Mail, label: "Email", value: SITE.email, href: `mailto:${SITE.email}` },
-  { icon: Phone, label: "Téléphone", value: SITE.phone, href: `tel:${SITE.phone}` },
+  ...SITE.phones.map((p) => ({
+    icon: Phone,
+    label: "Téléphone",
+    value: p.display,
+    href: `tel:${p.value}`,
+  })),
   { icon: Clock, label: "Horaires", value: SITE.hours },
 ];
+
+// Hero background — uses a vibrant festival crowd image
+export const HERO_IMAGE = "/images/festival-5.jpeg";
+// About / team image
+export const ABOUT_IMAGE = "/images/festival-2.jpeg";
+// Logo (official Grace Production logo)
+export const LOGO_PATH = "/images/logo.jpeg";

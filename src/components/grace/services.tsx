@@ -1,5 +1,6 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
 import { ArrowRight, Check } from 'lucide-react'
 import { Button } from '@/components/ui/button'
@@ -7,11 +8,6 @@ import { SERVICES } from './data'
 import { cn } from '@/lib/utils'
 
 export function Services() {
-  const scrollToContact = (e: React.MouseEvent) => {
-    e.preventDefault()
-    document.getElementById('contact')?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <section
       id="domaines"
@@ -109,13 +105,13 @@ export function Services() {
                   </ul>
 
                   {/* CTA */}
-                  <button
-                    onClick={scrollToContact}
+                  <Link
+                    href="/contact"
                     className="mt-6 inline-flex items-center gap-2 text-sm font-semibold text-gold hover:text-gold-soft transition-colors group/btn"
                   >
                     {service.cta}
                     <ArrowRight className="h-4 w-4 transition-transform group-hover/btn:translate-x-1" />
-                  </button>
+                  </Link>
                 </div>
 
                 {/* Decorative corner */}
@@ -140,12 +136,11 @@ export function Services() {
               <p className="text-sm text-cream/70 mt-3 max-w-xs mx-auto">
                 Parlons-en. Notre équipe vous répond sous 24h pour étudier votre projet.
               </p>
-              <Button
-                onClick={scrollToContact}
-                className="mt-6 bg-gold-gradient text-night hover:opacity-90 font-semibold h-11 px-6"
-              >
-                Démarrer un projet
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button asChild className="mt-6 bg-gold-gradient text-night hover:opacity-90 font-semibold h-11 px-6">
+                <Link href="/contact">
+                  Démarrer un projet
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </div>
           </motion.div>

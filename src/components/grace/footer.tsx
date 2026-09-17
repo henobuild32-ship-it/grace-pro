@@ -1,19 +1,15 @@
 'use client'
 
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import { ArrowUp, Instagram, Facebook, Sparkles, Mail, Phone, MapPin } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
-import { SITE, NAV_ITEMS, SOCIAL_LINKS } from './data'
+import { SITE, NAV_ITEMS, SOCIAL_LINKS, LOGO_PATH } from './data'
 import { useToast } from '@/hooks/use-toast'
 
 export function Footer() {
   const { toast } = useToast()
-
-  const handleNavClick = (e: React.MouseEvent, id: string) => {
-    e.preventDefault()
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
 
   const handleNewsletter = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault()
@@ -43,11 +39,6 @@ export function Footer() {
     }
   }
 
-  const scrollTop = (e: React.MouseEvent) => {
-    e.preventDefault()
-    window.scrollTo({ top: 0, behavior: 'smooth' })
-  }
-
   return (
     <footer className="relative bg-night border-t border-gold/15 overflow-hidden">
       {/* Decorative gradient */}
@@ -59,9 +50,9 @@ export function Footer() {
         <div className="py-12 md:py-16 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
           {/* Brand */}
           <div className="lg:col-span-1 space-y-4">
-            <div className="flex items-center gap-3">
-              <div className="h-11 w-11 rounded-full bg-gold-gradient flex items-center justify-center gold-glow">
-                <span className="font-display font-black text-night text-xl">G</span>
+            <Link href="/" className="flex items-center gap-3">
+              <div className="h-11 w-11 rounded-full overflow-hidden ring-1 ring-gold/40 gold-glow">
+                <img src={LOGO_PATH} alt="Logo Grace Production" className="h-full w-full object-cover" />
               </div>
               <div className="flex flex-col leading-tight">
                 <span className="font-display text-base font-bold tracking-wide text-cream">
@@ -71,7 +62,7 @@ export function Footer() {
                   {SITE.tagline}
                 </span>
               </div>
-            </div>
+            </Link>
             <p className="font-display italic text-gold text-lg">« {SITE.slogan} »</p>
             <p className="text-xs text-cream/60 leading-relaxed max-w-xs">
               Structure de production et d'événementiel basée à Kinshasa, dédiée à la conception et à
@@ -106,15 +97,20 @@ export function Footer() {
             </h3>
             <nav className="flex flex-col gap-2.5" aria-label="Navigation pied de page">
               {NAV_ITEMS.map((item) => (
-                <a
-                  key={item.id}
-                  href={`#${item.id}`}
-                  onClick={(e) => handleNavClick(e, item.id)}
+                <Link
+                  key={item.href}
+                  href={item.href}
                   className="text-sm text-cream/65 hover:text-gold transition-colors w-fit"
                 >
                   {item.label}
-                </a>
+                </Link>
               ))}
+              <Link
+                href="/connexion"
+                className="text-sm text-cream/65 hover:text-gold transition-colors w-fit"
+              >
+                Connexion Admin
+              </Link>
             </nav>
           </div>
 
@@ -137,15 +133,19 @@ export function Footer() {
                   <span>{SITE.email}</span>
                 </a>
               </li>
-              <li>
-                <a
-                  href={`tel:${SITE.phone}`}
-                  className="flex items-start gap-2.5 text-sm text-cream/65 hover:text-gold transition-colors"
-                >
-                  <Phone className="h-4 w-4 text-gold mt-0.5 shrink-0" />
-                  <span>{SITE.phone}</span>
-                </a>
-              </li>
+              {SITE.phones.map((p) => (
+                <li key={p.value}>
+                  <a
+                    href={`https://wa.me/${p.value.replace(/[^0-9]/g, '')}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="flex items-start gap-2.5 text-sm text-cream/65 hover:text-gold transition-colors"
+                  >
+                    <Phone className="h-4 w-4 text-gold mt-0.5 shrink-0" />
+                    <span>{p.display} <span className="text-gold/60 text-[10px]">(WhatsApp)</span></span>
+                  </a>
+                </li>
+              ))}
             </ul>
           </div>
 
@@ -206,8 +206,11 @@ export function Footer() {
             </a>
           </div>
           <a
-            href="#accueil"
-            onClick={scrollTop}
+            href="#"
+            onClick={(e) => {
+              e.preventDefault();
+              window.scrollTo({ top: 0, behavior: 'smooth' })
+            }}
             className="inline-flex items-center gap-2 text-xs text-cream/60 hover:text-gold transition-colors group"
             aria-label="Revenir en haut"
           >

@@ -97,3 +97,95 @@ Stage Summary:
 - 3 functional API endpoints persisting real data via Prisma (SQLite).
 - Lint passes cleanly; dev server runs without errors.
 - All core user flows verified end-to-end with Agent Browser (contact submit, partnership submit, newsletter, mobile menu, GET endpoints).
+
+---
+Task ID: 8-15
+Agent: main
+Task: Phase 2 — User's logo, real photos, multi-page conversion, WhatsApp numbers, and complete admin interface.
+
+Work Log:
+- Copied user-uploaded images to `/public/images/` with clean names:
+  - `logo.jpeg` (official Grace Production logo, 1600x800)
+  - `festival-1.jpeg` through `festival-5.jpeg` (5 festival posters — all for Festival Père des Orphelins)
+- Identified each uploaded photo via VLM (all are Festival Père des Orphelins posters with date 1 Nov 2026, Terrain Shaumba, tickets 5 000 FC / 10 USD VIP).
+- Updated `src/components/grace/data.ts`:
+  - Added `phones` array (two numbers: +243 831 199 435, +243 991 674 122).
+  - Added `whatsappNumbers` array with `wa.me` deep links.
+  - Added `whatsappLink()` helper.
+  - Added `LOGO_PATH`, `HERO_IMAGE`, `ABOUT_IMAGE` constants.
+  - Updated Festival Père des Orphelins with `gallery` (5 photos), `eventInfo` (date, venue, ticketStandard, ticketVip, ticketUrl="sombaticket.com", partners list).
+  - Updated NAV_ITEMS to use `href` (route links) instead of `id` (anchors).
+  - Updated CONTACT_INFO to render two phones with WhatsApp links.
+
+- Restructured site to multi-page App Router:
+  - Removed `src/app/page.tsx` (replaced with route groups).
+  - Created `src/app/(public)/layout.tsx` (Navbar + Footer wrapper, sticky-footer pattern).
+  - Created 6 public page files:
+    - `src/app/(public)/page.tsx` (Accueil — Hero, About, Services, Projects, Why/Engagements, Partners CTA)
+    - `src/app/(public)/a-propos/page.tsx` (About + Engagements)
+    - `src/app/(public)/domaines/page.tsx` (Services)
+    - `src/app/(public)/projets/page.tsx` (Projects with galleries + event info + ticket links)
+    - `src/app/(public)/partenaires/page.tsx` (Partners CTA + partnership form)
+    - `src/app/(public)/contact/page.tsx` (Contact form + info + WhatsApp links + map)
+  - Created `src/components/grace/page-header.tsx` (reusable inner-page hero with breadcrumbs).
+
+- Updated existing components for multi-page navigation:
+  - `navbar.tsx`: now uses `usePathname()` for active-state, `Link` for navigation, includes "Connexion" link in desktop + mobile menu, uses `LOGO_PATH` for the logo.
+  - `hero.tsx`: replaced AI `hero.png` with `HERO_IMAGE` (festival-5.jpeg), CTA buttons now Link to `/projets` and `/a-propos`.
+  - `about.tsx`: uses `ABOUT_IMAGE` (festival-2.jpeg), CTA links to `/a-propos`.
+  - `services.tsx`: service card CTAs Link to `/contact`.
+  - `projects.tsx`: adds `eventInfo` display (date/venue/tickets), `gallery` grid (5 photos), ticket button linking to `sombaticket.com`, secondary CTA links to `/partenaires`.
+  - `contact.tsx`: replaced `CONTACT_INFO` map with custom rendering including WhatsApp links (`wa.me/...`), added `MessageCircle` icon.
+  - `footer.tsx`: uses `Link` for navigation, renders both phone numbers with WhatsApp links, includes "Connexion Admin" link, uses `LOGO_PATH`.
+
+- Auth system (JWT + httpOnly cookie):
+  - Created `src/lib/auth.ts` with HS256 JWT signing/verification using Node's `crypto`.
+    - Note: Next.js 16 made `cookies()` async and read-only in route handlers. Fixed by using `NextResponse.cookies.set()` via `applySessionCookie()` and `clearSessionCookie()` helpers (passed the response object).
+    - `getSession()` and `requireAdmin()` are now async.
+    - Default credentials: `admin@graceproduction.cd` / `Grace@2025` (overridable via `ADMIN_EMAIL` / `ADMIN_PASSWORD` env vars).
+  - Created `src/app/api/auth/login/route.ts` (POST: verify + create session + set cookie; GET: expose admin email for prefill).
+  - Created `src/app/api/auth/logout/route.ts` (POST: clear cookie).
+
+- Admin API (all require valid session):
+  - `src/app/api/admin/stats/route.ts` (GET: counts, recent items, groupBy distributions).
+  - `src/app/api/admin/messages/route.ts` (GET: paginated list with search + status filter).
+  - `src/app/api/admin/messages/[id]/route.ts` (PATCH status, DELETE).
+  - `src/app/api/admin/partenariats/route.ts` (GET: paginated list with search + status + type filters).
+  - `src/app/api/admin/partenariats/[id]/route.ts` (PATCH status, DELETE).
+  - `src/app/api/admin/newsletter/route.ts` (GET list, DELETE by id).
+
+- Admin UI:
+  - `src/app/admin/layout.tsx` (server component, awaits `requireAdmin()` — redirects to `/connexion?error=unauthorized` if no session).
+  - `src/components/grace/admin-sidebar.tsx` (client component with desktop sidebar + mobile Sheet, active route highlight, logout button).
+  - `src/app/admin/page.tsx` (Dashboard: 4 stat cards, recent messages list, recent partnerships list, 2 bar charts for distributions).
+  - `src/app/admin/messages/page.tsx` (Messages management: search, status filter, list view, detail dialog with reply form, status update, delete).
+  - `src/app/admin/partenariats/page.tsx` (Partnership management: search, type filter, status filter, list view, detail dialog, accept/refuse/reply, delete).
+  - `src/app/admin/newsletter/page.tsx` (Newsletter: list of subscribers, delete individual, export CSV, mailto BCC all).
+
+- Connexion page (`src/app/connexion/page.tsx`):
+  - Standalone (no public Navbar/Footer) — has its own minimal "Retour au site" link.
+  - Login form with email/password (react-hook-form + zod), show/hide password toggle, error banner for unauthorized access.
+  - Prefills admin email via `GET /api/auth/login`.
+  - Posts to `/api/auth/login`, on success redirects to `/admin`.
+
+- Verification (Agent Browser end-to-end):
+  - All 7 routes return 200 (`/`, `/a-propos`, `/domaines`, `/projets`, `/partenaires`, `/contact`, `/connexion`).
+  - Multi-page navigation works via Link components.
+  - WhatsApp links on `/contact` open `https://wa.me/243831199435` and `https://wa.me/243991674122`.
+  - Festival gallery (5 photos) renders on `/projets` with event info (date, venue, tickets).
+  - Login flow: fill `admin@graceproduction.cd` / `Grace@2025` → POST 200 → cookie set → redirected to `/admin` (200).
+  - Admin dashboard: 4 stat cards (1 message, 1 partnership, 1 subscriber, 1 message last 7 days), recent lists, distribution charts all rendered.
+  - Messages page: list renders, search box + status filter work, message detail dialog opens, PATCH status (Marquer répondu) returns 200 with Prisma UPDATE.
+  - Partenariats page: list renders Fondation Hope, filters work.
+  - Newsletter page: 1 subscriber listed, CSV export + BCC mailto + delete buttons present.
+  - Logout: clears cookie, redirects to `/connexion`.
+  - VLM confirmed: logo visible in navbar, vibrant festival hero image with title "GRACE PRODUCTION", admin dashboard layout intact with sidebar + stats.
+  - `bun run lint` clean.
+
+Stage Summary:
+- Multi-page Next.js 16 site live with 7 public routes + 4 admin routes.
+- User's logo and 5 festival photos integrated; AI images still used as fallback for service images & partners/contact backgrounds.
+- Two WhatsApp numbers wired through Contact + Footer with `wa.me` deep links.
+- Full admin back-office: dashboard with stats, messages CRUD with reply, partnership requests CRUD with accept/refuse, newsletter subscribers with CSV export.
+- Auth: HS256 JWT in httpOnly cookie, 8h session, env-overridable credentials.
+- Default admin login: `admin@graceproduction.cd` / `Grace@2025` (change via ADMIN_EMAIL/ADMIN_PASSWORD env vars in production).

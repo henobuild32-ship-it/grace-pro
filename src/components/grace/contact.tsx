@@ -5,7 +5,7 @@ import { useState } from 'react'
 import { useForm } from 'react-hook-form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { z } from 'zod'
-import { Send, Check, Instagram, Facebook, MessageSquare } from 'lucide-react'
+import { Send, Check, Instagram, Facebook, MapPin, Mail, Clock, Phone, MessageCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Textarea } from '@/components/ui/textarea'
@@ -18,7 +18,7 @@ import {
   SelectValue,
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
-import { SITE, CONTACT_INFO, CONTACT_SUBJECTS, SOCIAL_LINKS } from './data'
+import { SITE, CONTACT_SUBJECTS, SOCIAL_LINKS } from './data'
 
 const contactSchema = z.object({
   name: z.string().min(2, 'Le nom est requis'),
@@ -128,31 +128,65 @@ export function Contact() {
             <div className="glass-card rounded-3xl p-7 space-y-5">
               <h3 className="font-display text-xl font-bold text-gold">Coordonnées</h3>
               <ul className="space-y-4">
-                {CONTACT_INFO.map((info) => {
-                  const Icon = info.icon
-                  return (
-                    <li key={info.label} className="flex items-start gap-3">
-                      <div className="shrink-0 h-10 w-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
-                        <Icon className="h-5 w-5 text-gold" />
-                      </div>
-                      <div>
-                        <p className="text-[11px] uppercase tracking-wider text-cream/50">
-                          {info.label}
-                        </p>
-                        {info.href ? (
+                <li className="flex items-start gap-3">
+                  <div className="shrink-0 h-10 w-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                    <MapPin className="h-5 w-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-cream/50">Adresse</p>
+                    <p className="text-sm text-cream">{SITE.location}</p>
+                  </div>
+                </li>
+                <li>
+                  <a
+                    href={`mailto:${SITE.email}`}
+                    className="flex items-start gap-3 hover:text-gold transition-colors break-all"
+                  >
+                    <div className="shrink-0 h-10 w-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                      <Mail className="h-5 w-5 text-gold" />
+                    </div>
+                    <div>
+                      <p className="text-[11px] uppercase tracking-wider text-cream/50">Email</p>
+                      <p className="text-sm text-cream break-all">{SITE.email}</p>
+                    </div>
+                  </a>
+                </li>
+                <li>
+                  <div className="flex items-start gap-3">
+                    <div className="shrink-0 h-10 w-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                      <Phone className="h-5 w-5 text-gold" />
+                    </div>
+                    <div className="flex-1">
+                      <p className="text-[11px] uppercase tracking-wider text-cream/50">Téléphone / WhatsApp</p>
+                      <div className="flex flex-col gap-1 mt-1">
+                        {SITE.whatsappNumbers.map((wa) => (
                           <a
-                            href={info.href}
-                            className="text-sm text-cream hover:text-gold transition-colors break-all"
+                            key={wa.waLink}
+                            href={wa.waLink}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="inline-flex items-center gap-1.5 text-sm text-cream hover:text-gold transition-colors group"
                           >
-                            {info.value}
+                            <MessageCircle className="h-3.5 w-3.5 text-gold" />
+                            <span>{wa.display}</span>
+                            <span className="text-[10px] text-gold/60 ml-1 opacity-0 group-hover:opacity-100 transition-opacity">
+                              (ouvrir WhatsApp)
+                            </span>
                           </a>
-                        ) : (
-                          <p className="text-sm text-cream">{info.value}</p>
-                        )}
+                        ))}
                       </div>
-                    </li>
-                  )
-                })}
+                    </div>
+                  </div>
+                </li>
+                <li className="flex items-start gap-3">
+                  <div className="shrink-0 h-10 w-10 rounded-xl bg-gold/10 border border-gold/30 flex items-center justify-center">
+                    <Clock className="h-5 w-5 text-gold" />
+                  </div>
+                  <div>
+                    <p className="text-[11px] uppercase tracking-wider text-cream/50">Horaires</p>
+                    <p className="text-sm text-cream">{SITE.hours}</p>
+                  </div>
+                </li>
               </ul>
 
               {/* Social links */}

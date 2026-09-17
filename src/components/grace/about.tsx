@@ -1,9 +1,10 @@
 'use client'
 
+import Link from 'next/link'
 import { motion } from 'framer-motion'
-import { ArrowRight, Check } from 'lucide-react'
+import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
-import { SITE } from './data'
+import { SITE, ABOUT_IMAGE } from './data'
 
 const STATS = [
   { value: '5', label: "Domaines d'intervention" },
@@ -13,11 +14,6 @@ const STATS = [
 ]
 
 export function About() {
-  const scrollTo = (id: string) => (e: React.MouseEvent) => {
-    e.preventDefault()
-    document.getElementById(id)?.scrollIntoView({ behavior: 'smooth', block: 'start' })
-  }
-
   return (
     <section
       id="a-propos"
@@ -39,8 +35,8 @@ export function About() {
           >
             <div className="relative aspect-[4/3] rounded-3xl overflow-hidden gold-glow">
               <img
-                src="/images/about.png"
-                alt="L'équipe de production Grace Production en coulisses"
+                src={ABOUT_IMAGE}
+                alt="Festival Père des Orphelins — affiche officielle"
                 className="h-full w-full object-cover"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-night/60 via-transparent to-transparent" />
@@ -96,12 +92,11 @@ export function About() {
               transition={{ delay: 0.3 }}
               className="mt-8"
             >
-              <Button
-                onClick={scrollTo('partenaires')}
-                className="bg-gold-gradient text-night hover:opacity-90 font-semibold h-12 px-6"
-              >
-                En savoir plus
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <Button asChild className="bg-gold-gradient text-night hover:opacity-90 font-semibold h-12 px-6">
+                <Link href="/a-propos">
+                  En savoir plus
+                  <ArrowRight className="ml-2 h-4 w-4" />
+                </Link>
               </Button>
             </motion.div>
 
