@@ -229,12 +229,27 @@ export const PROJECTS: ProjectItem[] = [
     subtitle: "Foi • Espérance • Transformation",
     description:
       "Une grande campagne d'évangélisation et de rassemblement spirituel portée autour de la foi, de l'espérance et de la transformation des vies. Ce projet rassemble différents acteurs du monde chrétien autour d'un même objectif : transmettre un message d'espérance et créer un impact durable au sein de la communauté.",
-    image: "/images/surnaturel-bala-bala.png",
+    image: "/images/surnaturel-bala-bala.jpeg",
+    gallery: [
+      "/images/surnaturel-bala-bala.jpeg",
+    ],
+    eventInfo: {
+      date: "25 Octobre 2026 — 14h30 & 19h30",
+      venue: "Terrain Buffle, Kingabwa (près de Rond point TP), Kinshasa",
+      ticketStandard: "Entrée libre",
+      ticketVip: "—",
+      ticketUrl: "",
+      partners: [
+        "Église des Rois et Terre des Sacrificateurs",
+        "Prédicateur Isaac Abba",
+        "Grace Production",
+      ],
+    },
     objectives: [
-      "Rassembler la communauté chrétienne",
+      "Rassembler la communauté chrétienne autour de la foi",
       "Évangéliser et transmettre un message d'espérance",
-      "Créer un impact spirituel durable",
-      "Mobiliser les artistes gospel et partenaires",
+      "Thème 2026 : « L'Ombre des choses à venir »",
+      "Mobiliser les artistes gospel et partenaires spirituels",
     ],
     audience: [
       "Communauté chrétienne",

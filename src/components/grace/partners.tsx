@@ -19,6 +19,7 @@ import {
 } from '@/components/ui/select'
 import { useToast } from '@/hooks/use-toast'
 import { PARTNER_FORMULAS, PARTNERSHIP_TYPES } from './data'
+import { LogoBackground } from './logo-background'
 
 const partnershipSchema = z.object({
   company: z.string().min(2, "Le nom de l'entreprise est requis"),
@@ -64,6 +65,15 @@ export function PartnersCTA() {
         />
         <div className="absolute inset-0 bg-gradient-to-b from-night via-night/85 to-night" />
       </div>
+
+      {/* Decorative logo watermark in background */}
+      <LogoBackground
+        opacity={0.22}
+        size={720}
+        rotate={-4}
+        position="center"
+        blend="screen"
+      />
 
       <div className="container mx-auto max-w-7xl px-4 md:px-8 relative">
         <motion.div

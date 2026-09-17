@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SITE, ABOUT_IMAGE } from './data'
+import { LogoBackground } from './logo-background'
 
 const STATS = [
   { value: '5', label: "Domaines d'intervention" },
@@ -22,6 +23,15 @@ export function About() {
       {/* Decorative gradient blobs */}
       <div className="absolute top-0 -left-32 h-96 w-96 rounded-full bg-purple/20 blur-[120px] pointer-events-none" />
       <div className="absolute bottom-0 -right-32 h-96 w-96 rounded-full bg-gold/15 blur-[120px] pointer-events-none" />
+
+      {/* Decorative logo watermark in background */}
+      <LogoBackground
+        opacity={0.18}
+        size={560}
+        rotate={12}
+        position="top-right"
+        blend="screen"
+      />
 
       <div className="container mx-auto max-w-7xl px-4 md:px-8 relative">
         <div className="grid lg:grid-cols-2 gap-12 lg:gap-20 items-center">

@@ -189,3 +189,42 @@ Stage Summary:
 - Full admin back-office: dashboard with stats, messages CRUD with reply, partnership requests CRUD with accept/refuse, newsletter subscribers with CSV export.
 - Auth: HS256 JWT in httpOnly cookie, 8h session, env-overridable credentials.
 - Default admin login: `admin@graceproduction.cd` / `Grace@2025` (change via ADMIN_EMAIL/ADMIN_PASSWORD env vars in production).
+
+---
+Task ID: 16-17
+Agent: main
+Task: Phase 3 — User's logo as elegant background watermark + replace Surnaturel Na Bala Bala AI photo with official poster.
+
+Work Log:
+- Copied the user-uploaded `WhatsApp Image 2026-09-17 at 17.09.07.jpeg` to `/public/images/surnaturel-bala-bala.jpeg` (1809x2560, portrait).
+- Identified the photo via VLM: official poster for "Surnaturel Na bala bala" 3rd Edition, organised by Église des Rois et Terre des Sacrificateurs, predicator Isaac Abba, theme "L'Ombre des choses à venir", 25 October 2026 at 14h30 & 19h30, Terrain Buffle (Kingabwa).
+- Updated `PROJECTS[1]` (Surnaturel Na Bala Bala) in `data.ts`:
+  - `image` now points to `/images/surnaturel-bala-bala.jpeg`.
+  - Added `gallery: ['/images/surnaturel-bala-bala.jpeg']`.
+  - Added `eventInfo` with date, venue (Terrain Buffle, Kingabwa), ticketStandard = "Entrée libre", ticketVip = "—", ticketUrl = "" (no online ticketing mentioned), partners list (Église des Rois et Terre des Sacrificateurs, Prédicateur Isaac Abba, Grace Production).
+  - Updated objectives to include the 2026 theme "L'Ombre des choses à venir".
+- Updated `projects.tsx` CTA logic: only renders "Acheter un billet" button when `eventInfo.ticketUrl` is non-empty; otherwise shows a passive badge with the ticket info (e.g. "Entrée libre" for Surnaturel). Festival still gets the "Acheter un billet" button linking to sombaticket.com.
+
+- Built decorative logo watermark component `src/components/grace/logo-background.tsx`:
+  - Renders the official `LOGO_PATH` (`/images/logo.jpeg`) as a semi-transparent background element.
+  - Props: `opacity` (default 0.5), `size`, `rotate`, `position` (center / corners), `blend` (normal/screen/overlay/soft-light/lighten/multiply).
+  - Soft elliptical radial mask fades out the logo's white background corners so it blends smoothly into the section (no hard square edge).
+  - Gold drop-shadow glow for premium effect.
+  - Framer-motion fade-in on first paint.
+
+- Wired the watermark into 3 key public sections:
+  - `hero.tsx`: two watermarks in opposite corners (top-right, 420px, opacity 0.6, rotate -8°) and (bottom-left, 360px, opacity 0.5, rotate +8°). Z-index 1 (above background image, below content z-10) so the title stays readable.
+  - `about.tsx`: one watermark top-right (560px, opacity 0.18, rotate +12°, blend screen) for a subtle decorative presence.
+  - `partners.tsx` (PartnersCTA): one centered watermark (720px, opacity 0.22, blend screen) over the gradient background.
+
+- Verification (Agent Browser + VLM):
+  - Home hero: VLM confirms the Grace Production logo is visible as decorative watermarks in both top-left and bottom-left corners (with the orange stylized G + "GRACE PRODUCTION" text). Festival image still visible in center. Title "GRACE PRODUCTION" remains highly readable.
+  - About page (full screenshot): VLM confirms the logo watermark is visible in the middle-right of the page.
+  - Partners page (full screenshot): VLM confirms the large semi-transparent red "G" logo watermark is visible in the center of the page.
+  - Projets page: VLM confirms two project sections render — "Surnaturel Na Bala Bala" with the official poster (preacher on blue background) + event date "25 Octobre 2026" + venue "Terrain Buffle"; and "Festival Père des Orphelins" with the red poster.
+  - `bun run lint` clean.
+
+Stage Summary:
+- Official Grace Production logo now appears in 3 background positions (hero corners, about section, partners CTA) as elegant decorative watermarks, plus the small navbar badge and footer brand.
+- Surnaturel Na Bala Bala project now uses the user's real poster with full event details (date, venue, partners, theme).
+- All AI-generated service images remain (user hasn't provided service-specific photos yet — ready to swap when provided).

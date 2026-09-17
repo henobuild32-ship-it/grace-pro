@@ -5,6 +5,7 @@ import { motion } from 'framer-motion'
 import { ArrowRight, Sparkles, PlayCircle } from 'lucide-react'
 import { Button } from '@/components/ui/button'
 import { SITE, HERO_IMAGE } from './data'
+import { LogoBackground } from './logo-background'
 
 export function Hero() {
   return (
@@ -51,6 +52,24 @@ export function Hero() {
           />
         ))}
       </div>
+
+      {/* Decorative logo watermark in background — visible brand element */}
+      <LogoBackground
+        opacity={0.6}
+        size={420}
+        rotate={-8}
+        position="top-right"
+        blend="normal"
+        className="z-[1]"
+      />
+      <LogoBackground
+        opacity={0.5}
+        size={360}
+        rotate={8}
+        position="bottom-left"
+        blend="normal"
+        className="z-[1]"
+      />
 
       {/* Content */}
       <div className="relative z-10 container mx-auto max-w-7xl px-4 md:px-8 text-center pt-24 pb-16">

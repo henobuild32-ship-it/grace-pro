@@ -158,7 +158,7 @@ export function Projects() {
 
                     {/* CTAs */}
                     <div className="mt-8 flex flex-wrap gap-3">
-                      {project.eventInfo && (
+                      {project.eventInfo?.ticketUrl && (
                         <a
                           href={project.eventInfo.ticketUrl}
                           target="_blank"
@@ -168,6 +168,11 @@ export function Projects() {
                           Acheter un billet
                           <ArrowRight className="h-4 w-4" />
                         </a>
+                      )}
+                      {project.eventInfo && !project.eventInfo.ticketUrl && (
+                        <span className="inline-flex items-center gap-2 h-11 px-5 rounded-xl border border-gold/30 bg-gold/5 text-gold text-sm font-semibold">
+                          {project.eventInfo.ticketStandard}
+                        </span>
                       )}
                       <Button asChild size="sm" variant="outline" className="border-gold/40 text-cream hover:bg-gold/10 hover:text-gold hover:border-gold bg-transparent h-11 px-5">
                         <Link href="/partenaires">
