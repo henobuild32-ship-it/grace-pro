@@ -419,3 +419,26 @@ Stage Summary:
 - All buttons now functional: no more dead `href="#"` links; footer legal links go to real pages; back-to-top and hero scroll indicator are proper buttons that work.
 - All forms are complete and accessible: loading states, client-side validation, aria-invalid, error/success toasts, reset after submit.
 - Admin interface fully mobile-optimised: 44px+ touch targets on mobile, safe-area insets (notch + home indicator), larger hamburger/close buttons, responsive button heights.
+
+---
+Task ID: 34
+Agent: main
+Task: Fix hydration mismatch error on hero scroll indicator.
+
+Work Log:
+- Diagnosed the hydration error: framer-motion's `<motion.button>` renders as a `<div>` on the server (with `ref={function useMotionRef.useCallback}`) but as a `<button>` on the client, causing a React hydration mismatch. This is a known framer-motion issue with motion-prefixed semantic elements (motion.button, motion.a, etc.).
+- Refactored the hero scroll indicator to separate the animation wrapper from the semantic button:
+  - Outer: `<motion.div>` for the fade-in animation (`initial={{opacity:0}} animate={{opacity:1}} transition={{delay:2}}`).
+  - Inner: regular `<button type="button">` with `onClick` (scroll down 90% of viewport), `aria-label`, proper touch styling.
+  - Innermost: `<motion.div>` for the bounce animation (`animate={{y:[0,8,0]}}`).
+- Searched the entire codebase for other `motion.button` or `motion.a` usages — none found (the hero was the only one).
+- Verification (Agent Browser):
+  - Reloaded `/` and checked console + errors: no hydration error, no warnings. Only normal logs (HMR, PWA service worker).
+  - Scroll indicator still works: clicking "Faire défiler vers le bas" scrolls 0 → 590px. ✓
+  - All 9 routes (`/`, `/a-propos`, `/domaines`, `/projets`, `/partenaires`, `/contact`, `/connexion`, `/mentions-legales`, `/confidentialite`) load with 200 and zero errors. ✓
+  - `bun run lint` clean.
+
+Stage Summary:
+- Hydration mismatch error fully resolved.
+- Hero scroll indicator now uses `<motion.div>` (animation wrapper) → `<button>` (semantic, accessible) → `<motion.div>` (bounce animation) — no more `motion.button` to avoid SSR/client rendering divergence.
+- All routes render cleanly without any hydration, runtime, or console errors.

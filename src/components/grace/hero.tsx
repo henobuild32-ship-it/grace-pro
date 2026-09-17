@@ -148,24 +148,28 @@ export function Hero() {
       </div>
 
       {/* Scroll indicator — clickable to scroll down */}
-      <motion.button
-        type="button"
-        onClick={() => window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' })}
+      <motion.div
         initial={{ opacity: 0 }}
         animate={{ opacity: 1 }}
         transition={{ delay: 2 }}
-        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10 flex flex-col items-center gap-2 text-cream/60 hover:text-gold transition-colors bg-transparent border-0 cursor-pointer p-2"
-        aria-label="Faire défiler vers le bas"
+        className="absolute bottom-6 left-1/2 -translate-x-1/2 z-10"
       >
-        <span className="text-[10px] uppercase tracking-[0.3em] hidden sm:block">Défiler</span>
-        <motion.div
-          animate={{ y: [0, 8, 0] }}
-          transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
-          className="h-9 w-5 rounded-full border border-cream/40 flex items-start justify-center p-1"
+        <button
+          type="button"
+          onClick={() => window.scrollBy({ top: window.innerHeight * 0.9, behavior: 'smooth' })}
+          className="flex flex-col items-center gap-2 text-cream/60 hover:text-gold transition-colors bg-transparent border-0 cursor-pointer p-2"
+          aria-label="Faire défiler vers le bas"
         >
-          <div className="h-1.5 w-1.5 rounded-full bg-gold" />
-        </motion.div>
-      </motion.button>
+          <span className="text-[10px] uppercase tracking-[0.3em] hidden sm:block">Défiler</span>
+          <motion.div
+            animate={{ y: [0, 8, 0] }}
+            transition={{ duration: 1.6, repeat: Infinity, ease: 'easeInOut' }}
+            className="h-9 w-5 rounded-full border border-cream/40 flex items-start justify-center p-1"
+          >
+            <div className="h-1.5 w-1.5 rounded-full bg-gold" />
+          </motion.div>
+        </button>
+      </motion.div>
     </section>
   )
 }
