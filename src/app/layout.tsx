@@ -127,7 +127,7 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="fr" suppressHydrationWarning className="dark">
+    <html lang="fr" suppressHydrationWarning>
       <head>
         {/* Explicit apple-touch-icon link (older iOS Safari compatibility) */}
         <link rel="apple-touch-icon" href="/icons/apple-touch-icon.png" />

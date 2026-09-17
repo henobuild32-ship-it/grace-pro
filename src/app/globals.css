@@ -57,10 +57,10 @@
   /* Brand palette */
   --gold: #d4af37;
   --gold-soft: #e6c65a;
-  --night: #0d0d0d;
-  --night-soft: #1a1a2e;
+  --night: #fffdf8;
+  --night-soft: #f3efe5;
   --purple: #6a0dad;
-  --cream: #f8f8f8;
+  --cream: #20243d;
 
   /* Light theme — cream background with dark text and gold accents */
   --background: oklch(0.985 0.005 80deg);
@@ -234,15 +234,16 @@
     color: transparent;
   }
   .bg-night-gradient {
-    background: linear-gradient(150deg, #0d0d0d 0%, #1a1a2e 60%, #0d0d0d 100%);
+    background: linear-gradient(150deg, #fffdf8 0%, #f5f0e5 60%, #ffffff 100%);
   }
   .bg-gold-gradient {
     background: linear-gradient(120deg, #d4af37 0%, #e6c65a 100%);
   }
   .glass-card {
-    background: rgba(22, 22, 30, 0.6);
+    background: rgba(255, 255, 255, 0.84);
     backdrop-filter: blur(12px);
-    border: 1px solid rgba(212, 175, 55, 0.15);
+    border: 1px solid rgba(106, 13, 173, 0.14);
+    box-shadow: 0 20px 60px rgba(32, 36, 61, 0.08);
   }
   .glass-card-light {
     background: rgba(255, 255, 255, 0.7);
